@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="おかいもの">
+<meta name="theme-color" content="#FFF9EC">
+<title>おかいもの ごっこ｜MieeL</title>
+<link rel="apple-touch-icon" id="touchIcon" href="">
+<style>
+  :root {
+    --mieel: radial-gradient(circle at 50% 0%,#1B8FE8 0%,#2BB8D6 28%,#3FCB9E 45%,#8FD24A 58%,#F4D027 72%,#F7941E 100%);
+    --bg: #FFF9EC; --ink: #1F2937; --sub: #6B7280; --line: #EEDFC2; --go: #2F9E44; --go-d: #237A34; --main: #E8590C; --main-d: #B8450A;
+    --blue: #1C7ED6; --blue-d: #1864AB; --wood: #C8955A; --wood-d: #8D6237; --pink: #F06595;
+    --emoji: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: "Hiragino Maru Gothic ProN","ヒラギノ丸ゴ ProN","BIZ UDPGothic","Yu Gothic UI","Meiryo",system-ui,sans-serif; font-weight: 700;
+    word-break: keep-all; overflow-wrap: anywhere; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: manipulation; overscroll-behavior: none;
+    display: flex; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; }
+  .emo { font-family: var(--emoji); font-weight: 400; line-height: 1; }
+  .topbar { flex: none; display: flex; align-items: center; gap: 12px; padding: 8px 16px; min-height: 66px; }
+  .brand { flex: 1; display: flex; justify-content: center; align-items: center; gap: 14px; color: #BFA67E; font-size: 16px; letter-spacing: .1em; }
+  .mieel-brand { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+  .orb-mini { width: 22px; height: 22px; border-radius: 50%; background: var(--mieel); flex: none; }
+  .mieel-brand strong { font-size: 16px; color: var(--ink); }
+  .mieel-brand .url { font-size: 12px; color: var(--sub); font-weight: 600; }
+  @media (max-width: 699px) { .topbar .mieel-brand .url { display: none; } }
+  .gear { position: relative; width: 52px; height: 52px; border-radius: 50%; border: none; background: transparent; opacity: .35; font-size: 26px; display: grid; place-items: center; }
+  .gear::after { content: ""; position: absolute; inset: 2px; border-radius: 50%; border: 4px solid transparent; }
+  .gear.pressing { opacity: 1; }
+  .gear.pressing::after { border-color: var(--blue); animation: ring 1.5s linear forwards; }
+  @keyframes ring { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  .homebtn { height: 52px; padding: 0 18px; border-radius: 999px; border: 3px solid var(--line); background: #fff; font-size: 18px; }
+  .homebtn[hidden] { display: none; }
+  main { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 0 18px 16px; }
+  .screen { flex: 1; min-height: 0; display: flex; flex-direction: column; animation: fadein .25s ease-out; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @keyframes pop { from { transform: scale(.7); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes shake { 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+  @keyframes bump { 40% { transform: scale(1.12) rotate(-3deg); } }
+  .title { font-size: clamp(28px, 4.2vw, 48px); text-align: center; margin: 4px 0 12px; }
+  .pic { display: flex; align-items: center; justify-content: center; overflow: hidden; }
+  .pic img { width: 100%; height: 100%; object-fit: contain; border-radius: 12px; pointer-events: none; }
+  .pic .emoji { font-family: var(--emoji); font-weight: 400; line-height: 1; }
+  .pic .letter { width: 1.5em; height: 1.5em; border-radius: 50%; display: grid; place-items: center; background: var(--main); color: #fff; }
+  .big-btn { min-width: min(380px, 78vw); min-height: 92px; padding: 0 36px; border: none; border-radius: 999px; color: #fff; font-size: clamp(26px, 3.6vw, 40px); display: inline-flex; align-items: center; justify-content: center; gap: 12px; }
+  .big-btn.go { background: var(--go); box-shadow: 0 8px 0 var(--go-d); }
+  .big-btn.or { background: var(--main); box-shadow: 0 8px 0 var(--main-d); }
+  .big-btn.blue { background: var(--blue); box-shadow: 0 8px 0 var(--blue-d); }
+  .big-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 rgba(0,0,0,.25); }
+  .big-btn.dim { opacity: .4; }
+  .actions { display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap; }
+  .round-btn { width: 80px; height: 80px; border-radius: 50%; border: 4px solid var(--line); background: #fff; font-size: 36px; box-shadow: 0 5px 0 var(--line); display: grid; place-items: center; }
+
+  /* ---------- おみせを えらぶ ---------- */
+  .shops { flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; align-content: center; overflow-y: auto; padding: 6px; }
+  .shop { position: relative; border: none; background: #fff; border-radius: 26px; overflow: hidden; box-shadow: 0 7px 0 rgba(0,0,0,.12); display: flex; flex-direction: column; align-items: center; padding: 0 0 14px; text-align: center; }
+  .shop .awn { width: 100%; height: 46px; background: repeating-linear-gradient(90deg, var(--c) 0 34px, #fff 34px 68px); border-bottom: 6px solid var(--c); mask: radial-gradient(circle at 17px 46px, transparent 17px, #000 17.5px) 0 0 / 34px 100% repeat-x; -webkit-mask: radial-gradient(circle at 17px 46px, transparent 17px, #000 17.5px) 0 0 / 34px 100% repeat-x; }
+  .shop .ic { font-size: clamp(72px, 9vw, 100px); margin-top: 8px; }
+  .shop .nm { font-size: clamp(24px, 2.6vw, 30px); margin-top: 6px; line-height: 1.2; }
+  .shop small { font-size: 15px; color: var(--sub); font-weight: 500; }
+  .shop:active { transform: translateY(5px); box-shadow: 0 2px 0 rgba(0,0,0,.12); }
+
+  /* ---------- メモ ---------- */
+  .memo-scr { justify-content: center; align-items: center; gap: 14px; }
+  .memo { background: #FFFDF5; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,.12); padding: 20px 34px 24px; min-width: min(560px, 90vw); position: relative;
+    background-image: repeating-linear-gradient(#FFFDF5 0 55px, #E3EEFA 55px 57px); transform: rotate(-1.2deg); }
+  .memo::before { content: ""; position: absolute; top: -14px; left: 50%; width: 120px; height: 28px; transform: translateX(-50%) rotate(2deg); background: rgba(255, 212, 59, .7); }
+  .memo h2 { margin: 0 0 8px; font-size: clamp(26px, 3.4vw, 38px); text-align: center; }
+  .mrow { display: flex; align-items: center; gap: 14px; min-height: 57px; font-size: clamp(24px, 3vw, 34px); }
+  .mrow .pic { width: 64px; height: 50px; }
+  .mrow .pic .emoji { font-size: 46px; }
+  .mrow .q { margin-left: auto; color: var(--main); }
+  .mrow.ok { color: #ADB5BD; text-decoration: line-through; }
+  .budget { font-size: clamp(26px, 3.4vw, 40px); text-align: center; }
+  .budget b { color: var(--main); font-size: 1.4em; }
+
+  /* ---------- おみせの なか ---------- */
+  .store { display: grid; grid-template-columns: minmax(180px, 230px) minmax(0, 1fr) minmax(190px, 250px); gap: 14px; }
+  .side { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+  .memo-mini { background: #FFFDF5; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.1); padding: 10px 12px; font-size: clamp(16px, 1.8vw, 20px); }
+  .memo-mini .t { text-align: center; color: var(--sub); font-size: 15px; }
+  .memo-mini .mrow { min-height: 44px; font-size: inherit; gap: 8px; }
+  .memo-mini .mrow .pic { width: 40px; height: 40px; }
+  .memo-mini .mrow .pic .emoji { font-size: 32px; }
+  .shelves { position: relative; border-radius: 22px; background: linear-gradient(#FFF3E0, #FFE8CC); border: 6px solid var(--wood-d); display: flex; flex-direction: column; justify-content: space-evenly; padding: 12px 10px; overflow-y: auto; min-height: 0; }
+  .shelf { display: flex; justify-content: space-evenly; align-items: flex-end; gap: 6px; padding: 0 6px 10px; border-bottom: 14px solid var(--wood); box-shadow: 0 8px 0 -2px var(--wood-d); margin-bottom: 12px; flex-wrap: wrap; }
+  .item { position: relative; border: none; background: transparent; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 2px; touch-action: none; min-width: 84px; }
+  .item .pic { width: clamp(64px, 8vw, 96px); height: clamp(60px, 8.5vh, 92px); }
+  .item .pic .emoji { font-size: clamp(52px, min(6.6vw, 8vh), 80px); }
+  .item .tag { background: #fff; border: 2px solid #E03131; color: #C92A2A; border-radius: 8px; padding: 0 8px; font-size: clamp(15px, 1.7vw, 19px); }
+  .item .nm { font-size: 14px; color: var(--sub); }
+  .item.gone { opacity: .2; pointer-events: none; }
+  .item.ng { animation: shake .45s; }
+  .basket-box { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 8px; }
+  .basket-box .sum { margin-bottom: 44px; }
+  #bagged .pic { width: 64px; height: 60px; }
+  #bagged .pic .emoji { font-size: 52px; }
+  #bagged { border-top: 4px dashed var(--line); padding-top: 10px; }
+  #bagged::before { content: '🛍️ ふくろ'; width: 100%; text-align: center; color: var(--sub); font-size: 15px; }
+  .basket { position: relative; width: 100%; min-height: 200px; border-radius: 18px 18px 34px 34px; border: 6px solid #F08C00; background: repeating-linear-gradient(90deg, #FFE8CC 0 16px, #FFD8A8 16px 20px); display: flex; flex-wrap: wrap; align-content: flex-end; justify-content: center; gap: 2px; padding: 34px 8px 10px; }
+  .basket::before { content: ""; position: absolute; top: -40px; left: 18%; right: 18%; height: 56px; border: 7px solid #F08C00; border-bottom: none; border-radius: 60px 60px 0 0; }
+  .basket.over { border-color: var(--go); box-shadow: 0 0 0 6px rgba(47,158,68,.3); }
+  .basket.bump { animation: bump .45s cubic-bezier(.2, 1.6, .4, 1); }
+  .basket .bi { border: none; background: transparent; padding: 0; }
+  .basket .bi .pic { width: 62px; height: 60px; }
+  .basket .bi .pic .emoji { font-size: 52px; }
+  .basket .empty { position: absolute; inset: 40px 6px auto; text-align: center; color: #B3884A; font-size: 16px; }
+  .sum { font-size: clamp(20px, 2.4vw, 26px); background: #fff; border-radius: 14px; padding: 6px 12px; border: 3px solid var(--line); text-align: center; }
+  .sum.over { border-color: #E03131; color: #C92A2A; }
+  .ghost { position: fixed; z-index: 70; pointer-events: none; transform: translate(-50%, -50%) scale(1.15); filter: drop-shadow(0 10px 12px rgba(0,0,0,.25)); }
+  .ghost .pic { width: 100px; height: 100px; }
+  .ghost .pic .emoji { font-size: 84px; }
+  .flyer { position: fixed; z-index: 69; pointer-events: none; transition: transform .45s cubic-bezier(.4, 0, .6, 1), opacity .45s; }
+  .hint { text-align: center; color: var(--sub); font-size: 17px; font-weight: 500; }
+
+  /* ---------- レジ ---------- */
+  .reg { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto; gap: 12px; }
+  .clerk { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 16px; }
+  .clerk .face { font-size: clamp(60px, 8vh, 84px); }
+  .bubble { position: relative; background: #fff; border: 4px solid var(--line); border-radius: 22px; padding: 10px 22px; font-size: clamp(22px, 2.8vw, 32px); }
+  .bubble::before { content: ""; position: absolute; left: -16px; top: 50%; border: 10px solid transparent; border-right: 14px solid var(--line); transform: translateY(-50%); }
+  .counter { background: linear-gradient(#ECECEC, #D9D9D9); border-radius: 22px; border: 6px solid #ADB5BD; padding: 12px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+  .counter .lab { text-align: center; color: #495057; font-size: 17px; }
+  .lane { flex: 1; display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: center; gap: 8px; overflow-y: auto; min-height: 0; }
+  .scanitem { border: 4px solid #fff; background: #fff; border-radius: 18px; padding: 6px; display: flex; flex-direction: column; align-items: center; touch-action: none; box-shadow: 0 4px 0 #ADB5BD; }
+  .scanitem .pic { width: 74px; height: 70px; }
+  .scanitem .pic .emoji { font-size: 60px; }
+  .scanitem .pr { font-size: 16px; color: #C92A2A; }
+  .scanner { display: flex; align-items: center; gap: 12px; justify-content: center; }
+  .scanner .glass { width: 150px; height: 90px; border-radius: 14px; background: #343A40; position: relative; overflow: hidden; border: 4px solid #868E96; }
+  .scanner .glass::after { content: ""; position: absolute; left: 10%; right: 10%; top: 50%; height: 4px; background: #FA5252; box-shadow: 0 0 12px 4px rgba(250,82,82,.8); animation: scan 1.2s ease-in-out infinite alternate; }
+  @keyframes scan { from { transform: translateY(-30px); } to { transform: translateY(30px); } }
+  .scanner .glass.over { border-color: var(--go); }
+  .display { background: #0B3D2E; color: #8CE99A; font-family: "Consolas", monospace; border-radius: 12px; padding: 10px 18px; font-size: clamp(28px, 4vw, 44px); min-width: 220px; text-align: right; border: 5px solid #495057; }
+  .display small { display: block; font-size: 14px; color: #69DB7C; text-align: left; font-family: inherit; }
+  .bagside { background: #fff; border-radius: 22px; border: 6px dashed var(--line); padding: 12px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+
+  /* ---------- おさいふ ---------- */
+  .pay { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 1fr auto; gap: 12px; }
+  .tray { position: relative; border-radius: 30px; background: radial-gradient(#5C4033, #3E2A20); border: 8px solid #2B1B14; min-height: 220px; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 6px; padding: 16px; }
+  .tray .lab { position: absolute; top: 8px; left: 0; right: 0; text-align: center; color: #E9D8C6; font-size: 16px; }
+  .tray.over { box-shadow: 0 0 0 7px rgba(47,158,68,.45); }
+  .tray .tm { border: none; background: none; padding: 0; }
+  .wallet { border-radius: 26px; background: #FFF0F6; border: 6px solid var(--pink); padding: 14px; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; gap: 12px; }
+  .wm { border: none; background: none; padding: 2px; touch-action: none; position: relative; }
+  .wm .n { position: absolute; right: -4px; bottom: -2px; background: var(--ink); color: #fff; border-radius: 999px; font-size: 13px; padding: 0 7px; }
+  .wm.zero { opacity: .25; pointer-events: none; }
+  .paybar { grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .mn { display: inline-block; vertical-align: middle; }
+
+  /* ---------- レシート ---------- */
+  .done-scr { align-items: center; justify-content: center; gap: 14px; }
+  .receipt { width: min(360px, 86vw); background: #fff; padding: 18px 22px 26px; font-family: "Consolas","BIZ UDGothic",monospace; font-weight: 400; font-size: 17px; line-height: 1.7; box-shadow: 0 10px 24px rgba(0,0,0,.15);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 95% 98%, 90% 100%, 85% 98%, 80% 100%, 75% 98%, 70% 100%, 65% 98%, 60% 100%, 55% 98%, 50% 100%, 45% 98%, 40% 100%, 35% 98%, 30% 100%, 25% 98%, 20% 100%, 15% 98%, 10% 100%, 5% 98%, 0 100%);
+    animation: print 1.6s steps(12) both; transform-origin: top; }
+  @keyframes print { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+  .receipt h3 { text-align: center; margin: 0 0 6px; font-family: inherit; }
+  .receipt .r { display: flex; justify-content: space-between; gap: 10px; }
+  .receipt hr { border: none; border-top: 2px dashed #ADB5BD; }
+  .receipt .tot { font-weight: 700; font-size: 20px; }
+  .goal-title { font-size: clamp(44px, 7vw, 86px); margin: 0; }
+  .rainbow-text { background: linear-gradient(90deg, #FF6B6B, #FFA94D, #FFD43B, #69DB7C, #4DABF7, #9775FA, #F783AC); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 4px 0 #fff) drop-shadow(0 6px 0 rgba(0,0,0,.12)); background-size: 200% 100%; animation: rb 2s linear infinite; }
+  @keyframes rb { to { background-position: 200% 0; } }
+  .done-row { display: flex; gap: 24px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .bagbig { font-size: clamp(110px, 18vh, 170px); animation: dance .7s ease-in-out infinite alternate; }
+  @keyframes dance { from { transform: translateY(0) rotate(-8deg); } to { transform: translateY(-20px) rotate(8deg); } }
+
+  .praise { position: fixed; left: 50%; top: 38%; transform: translate(-50%, -50%); font-size: clamp(54px, 9vw, 110px); font-weight: 900; color: var(--main); white-space: nowrap; -webkit-text-stroke: 5px #fff; paint-order: stroke fill; pointer-events: none; z-index: 60; animation: praise 1.2s ease-out forwards; }
+  @keyframes praise { 0% { transform: translate(-50%, -50%) scale(.3); opacity: 0; } 22% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; } 70% { transform: translate(-50%, -54%) scale(1); opacity: 1; } 100% { transform: translate(-50%, -70%) scale(1); opacity: 0; } }
+  .toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: rgba(17,24,39,.9); color: #fff; padding: 14px 22px; border-radius: 14px; font-size: 18px; z-index: 80; display: none; max-width: 90vw; text-align: center; }
+  .toast.show { display: block; }
+  body.calm *, body.calm *::before, body.calm *::after { animation: none !important; transition: none !important; }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  @media (orientation: portrait) {
+    .store { grid-template-columns: 1fr; grid-template-rows: auto 1fr auto; }
+    .side.left { flex-direction: row; }
+    .side.left .memo-mini { flex: 1; }
+    .basket-box { flex-direction: row; align-items: flex-end; }
+    .basket { min-height: 140px; }
+    .reg, .pay { grid-template-columns: 1fr; grid-template-rows: auto 1fr 1fr auto; }
+  }
+
+  /* ---------- 先生用 ---------- */
+  .modal { position: fixed; inset: 0; z-index: 90; background: rgba(17,24,39,.55); display: none; align-items: flex-start; justify-content: center; padding: 24px 12px; overflow-y: auto; -webkit-user-select: text; user-select: text; }
+  .modal.open { display: flex; }
+  .panel { width: min(100%, 820px); background: #fff; border-radius: 24px; padding: 22px clamp(16px, 4vw, 32px) 28px; font-weight: 400; font-size: 17px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+  .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .panel h2 { margin: 0; font-size: 25px; font-weight: 700; }
+  .panel h3 { margin: 26px 0 10px; font-size: 20px; font-weight: 700; padding-left: 10px; border-left: 6px solid var(--main); }
+  .note { color: var(--sub); font-size: 15px; line-height: 1.6; margin: 6px 0; }
+  .seglabel { margin: 12px 0 6px; font-weight: 700; font-size: 15px; }
+  .seg { display: flex; gap: 8px; flex-wrap: wrap; }
+  .seg button { flex: 1; min-width: 120px; padding: 11px 8px; font-size: 15px; font-weight: 700; border-radius: 12px; border: 2px solid #CED4DA; background: #fff; }
+  .seg button.on { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .panel label.row { display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 6px 0; border-bottom: 1px solid #F1F3F5; }
+  .panel label.row > span:first-child { flex: 1; }
+  .panel input[type=checkbox] { width: 30px; height: 30px; accent-color: var(--go); }
+  .panel input[type=range] { width: 200px; }
+  .panel input[type=text], .panel input[type=number], .panel select { font: inherit; padding: 9px 12px; border: 2px solid #CED4DA; border-radius: 12px; }
+  .btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; border: none; border-radius: 12px; padding: 11px 18px; font-size: 16px; font-weight: 700; background: #E9ECEF; color: var(--ink); }
+  .btn.ok { background: var(--go); color: #fff; }
+  .btn.warn { background: #FFF0F0; color: #C92A2A; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chipt { border: 2px solid #DEE2E6; background: #fff; border-radius: 999px; padding: 8px 14px; font-weight: 700; font-size: 15px; }
+  .chipt.on { border-color: var(--main); background: #FFF4E6; color: var(--main-d); }
+  .cform { display: grid; gap: 8px; background: #F8F9FA; border-radius: 14px; padding: 12px; }
+  .crow { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .photo-prev { width: 70px; height: 70px; border-radius: 12px; border: 2px dashed #CED4DA; background: #fff center / cover no-repeat; display: grid; place-items: center; color: #ADB5BD; font-size: 12px; }
+  .clist { display: grid; gap: 6px; }
+  .citem { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border: 1px solid #E9ECEF; border-radius: 12px; }
+  .citem .pic { width: 44px; height: 44px; }
+  .citem .pic .emoji { font-size: 32px; }
+  .mieel-foot { margin-top: 26px; padding-top: 14px; border-top: 1px solid #E9ECEF; text-align: center; color: var(--sub); font-size: 13px; line-height: 1.8; }
+  .mieel-foot .mieel-brand { justify-content: center; }
+  .mieel-foot a { color: var(--blue); font-weight: 700; text-decoration: none; font-size: 14px; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button class="homebtn" id="homeBtn" type="button" hidden>🏠 おみせを えらぶ</button>
+  <div class="brand"><div class="mieel-brand"><span class="orb-mini"></span><strong>MieeL</strong><span class="url">mieel-support-school.com</span></div><span>おかいもの ごっこ</span></div>
+  <button class="gear" id="gear" type="button" aria-label="先生用せってい（ながおし）">⚙️</button>
+</header>
+<main id="view"></main>
+<div class="modal" id="settings" role="dialog" aria-modal="true"><div class="panel" id="settingsPanel"></div></div>
+<div class="toast" id="toast"></div>
+<script>
+(function () {
+  'use strict';
+
+  /* ============================================================
+     おみせと しなもの（[なまえ, えもじ, ねだん]）
+     ============================================================ */
+  const SHOPS = [
+    { id: 'super', name: 'スーパー', icon: '🛒', c: '#E03131', clerk: '🧑‍💼', items: [['りんご', '🍎', 120], ['バナナ', '🍌', 150], ['ぎゅうにゅう', '🥛', 180], ['たまご', '🥚', 220], ['パン', '🍞', 160], ['にんじん', '🥕', 80], ['トマト', '🍅', 100], ['さかな', '🐟', 300], ['おにく', '🥩', 400], ['ジュース', '🧃', 130], ['チーズ', '🧀', 250], ['おにぎり', '🍙', 120]] },
+    { id: 'conv', name: 'コンビニ', icon: '🏪', c: '#1C7ED6', clerk: '🧑', items: [['おにぎり', '🍙', 130], ['サンドイッチ', '🥪', 250], ['おちゃ', '🍵', 150], ['ジュース', '🧃', 140], ['アイス', '🍦', 150], ['クッキー', '🍪', 120], ['からあげ', '🍗', 220], ['プリン', '🍮', 180], ['おべんとう', '🍱', 450], ['あめ', '🍬', 100]] },
+    { id: 'bakery', name: 'パンやさん', icon: '🥐', c: '#C98A2E', clerk: '👩‍🍳', items: [['クロワッサン', '🥐', 180], ['しょくパン', '🍞', 250], ['フランスパン', '🥖', 280], ['カレーパン', '🍛', 200], ['ドーナツ', '🍩', 150], ['サンドイッチ', '🥪', 300], ['ケーキ', '🍰', 350], ['クッキー', '🍪', 120], ['ベーグル', '🥯', 160], ['パンケーキ', '🥞', 300]] },
+    { id: 'yaoya', name: 'やおやさん', icon: '🥕', c: '#2F9E44', clerk: '👨‍🌾', items: [['キャベツ', '🥬', 200], ['にんじん', '🥕', 60], ['じゃがいも', '🥔', 50], ['たまねぎ', '🧅', 40], ['トマト', '🍅', 90], ['きゅうり', '🥒', 50], ['ピーマン', '🫑', 40], ['とうもろこし', '🌽', 150], ['なす', '🍆', 70], ['みかん', '🍊', 30], ['ぶどう', '🍇', 400], ['いちご', '🍓', 500]] },
+    { id: 'dagashi', name: 'おかしやさん', icon: '🍬', c: '#F06595', clerk: '👵', items: [['あめ', '🍬', 10], ['チョコ', '🍫', 30], ['ロリポップ', '🍭', 20], ['せんべい', '🍘', 50], ['だんご', '🍡', 60], ['スナック', '🍟', 80], ['クッキー', '🍪', 100], ['アイス', '🍦', 60], ['ジュース', '🧃', 100], ['ドーナツ', '🍩', 120]] },
+    { id: 'bungu', name: 'ぶんぼうぐや', icon: '✏️', c: '#7048E8', clerk: '👨', items: [['えんぴつ', '✏️', 60], ['けしごむ', '🧽', 80], ['ノート', '📓', 150], ['のり', '🧴', 120], ['はさみ', '✂️', 300], ['じょうぎ', '📏', 200], ['クレヨン', '🖍️', 400], ['ペン', '🖊️', 100], ['シール', '⭐', 150], ['クリップ', '📎', 100]] },
+    { id: 'hyakkin', name: '100えん ショップ', icon: '💯', c: '#0CA678', clerk: '🧑‍🦱', items: [['コップ', '🥤', 100], ['おさら', '🍽️', 100], ['スポンジ', '🧽', 100], ['ボール', '⚽', 100], ['おもちゃ', '🧸', 100], ['ノート', '📓', 100], ['えんぴつ', '✏️', 100], ['かがみ', '🪞', 100], ['てぶくろ', '🧤', 100], ['くし', '🪮', 100]] }
+  ];
+  const MONEY = [1, 5, 10, 50, 100, 500, 1000, 5000];
+  const PRAISES = ['いいね！', 'ナイス！', 'じょうず！', 'ばっちり！', 'その ちょうし！', 'さすが！', 'すごい！', 'やったね！'];
+
+  /* ---------- 保存 ---------- */
+  const LS = 'okaimono.v1';
+  const $ = s => document.querySelector(s);
+  const $$ = s => Array.from(document.querySelectorAll(s));
+  const uid = () => Math.random().toString(36).slice(2, 9);
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const shuffle = a => { const r = a.slice(); for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
+  function load(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+  function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  const DEF = {
+    mode: 'memo',            // memo：おつかいメモ ／ budget：よさんで じゆうに
+    kinds: 2,                // メモの しゅるい
+    multi: false,            // ×2 など
+    budget: 500,
+    price: 'ten',            // ten：10えん たんい ／ real：そのまま（1えん たんいも） ／ hundred：100えん たんい
+    pay: 'exact',            // exact：ちょうど ／ change：おつり あり（おおきい おかねで）
+    wallet: [10, 50, 100, 500, 1000],
+    showSum: true, showPrice: true, voice: true, sound: true, volume: 0.8, rate: 0.95, calm: false
+  };
+  const st = Object.assign({}, DEF, (load(LS) || {}).settings || {});
+  const custom = (load(LS) || {}).custom || [];   // せんせいが つくった しなもの {id, shop, n, e, p, img}
+  const log = (load(LS) || {}).log || [];
+  const S = () => st;
+  function persist() { if (!save(LS, { settings: st, custom: custom, log: log.slice(-300) })) toast('保存できませんでした（容量が いっぱいです）'); }
+
+  function priceOf(p) {
+    if (st.price === 'hundred') return Math.max(100, Math.round(p / 100) * 100);
+    if (st.price === 'real') return p % 10 === 0 && p >= 50 ? p - 2 : p;    // 98えん など
+    return p;
+  }
+  const yen = n => n + 'えん';
+  function itemsOf(shop) {
+    return shop.items.map((x, i) => ({ id: shop.id + i, name: x[0], emoji: x[1], price: priceOf(x[2]) }))
+      .concat(custom.filter(c => c.shop === shop.id).map(c => ({ id: c.id, name: c.n, emoji: c.e, image: c.img, price: Number(c.p) || 100 })));
+  }
+
+  /* ---------- 小さな道具 ---------- */
+  function h(tag, props) {
+    const el = document.createElement(tag);
+    if (props) Object.keys(props).forEach(k => {
+      const v = props[k]; if (v === null || v === undefined || v === false) return;
+      if (k === 'class') el.className = v; else if (k === 'html') el.innerHTML = v; else if (k.slice(0, 2) === 'on') el.addEventListener(k.slice(2), v); else el.setAttribute(k, v === true ? '' : v);
+    });
+    (function add(list) { list.forEach(c => { if (c === null || c === undefined || c === false) return; if (Array.isArray(c)) add(c); else el.appendChild(typeof c === 'string' || typeof c === 'number' ? document.createTextNode(String(c)) : c); }); })(Array.prototype.slice.call(arguments, 2));
+    return el;
+  }
+  function pic(it, size) {
+    const w = h('span', { class: 'pic' });
+    const fb = () => { w.innerHTML = ''; w.appendChild(it.emoji ? h('span', { class: 'emoji' }, it.emoji) : h('span', { class: 'letter' }, Array.from(it.name || '？')[0])); };
+    if (it.image) { const img = h('img', { alt: '' }); img.onerror = fb; img.src = it.image; w.appendChild(img); } else fb();
+    return w;
+  }
+  let toastT = null;
+  function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
+  let lockUntil = 0;
+  function tapOk(ms) { const n = Date.now(); if (n < lockUntil) return false; lockUntil = n + (ms || 500); return true; }
+  function showPraise(t) { const p = h('div', { class: 'praise' }, t); document.body.appendChild(p); setTimeout(() => p.remove(), 1250); }
+
+  /* ---------- 音 ---------- */
+  let ac = null;
+  function audio() { if (!st.sound) return null; try { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); return ac; } catch (e) { return null; } }
+  function tone(f, s, d, type, v) { const a = audio(); if (!a) return; const t = a.currentTime + s, o = a.createOscillator(), g = a.createGain(); o.type = type || 'sine'; o.frequency.setValueAtTime(f, t); g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime((v || .25) * st.volume, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d); o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + d + .05); }
+  const sfx = {
+    tap() { tone(740, 0, .08, 'triangle', .16); },
+    plop() { tone(220, 0, .12, 'sine', .35); tone(440, .05, .12, 'triangle', .2); },
+    beep() { tone(1760, 0, .09, 'square', .12); },                       // レジの ピッ
+    coin(i) { const f = 2000 + (i || 0) * 150; tone(f, 0, .18, 'sine', .18); tone(f * 1.5, .03, .22, 'sine', .12); },  // チャリン
+    paper() { tone(300, 0, .05, 'triangle', .12); },
+    ng() { tone(330, 0, .16, 'triangle', .18); tone(262, .12, .22, 'triangle', .16); },
+    till() { [1319, 1568, 2093].forEach((f, i) => tone(f, i * .08, .3, 'sine', .2)); },
+    door() { tone(988, 0, .4, 'sine', .25); tone(784, .35, .5, 'sine', .25); },   // ピンポーン
+    fanfare() { [[523, 0], [659, .12], [784, .24], [1047, .4], [784, .6], [1047, .74]].forEach(n => { tone(n[0], n[1], .32, 'square', .07); tone(n[0], n[1], .38, 'triangle', .22); }); }
+  };
+  const canSpeak = 'speechSynthesis' in window;
+  let jaVoice = null;
+  function loadVoice() { if (!canSpeak) return; const v = speechSynthesis.getVoices().filter(x => /^ja/i.test(x.lang)); jaVoice = v.find(x => /Kyoko|O-ren|Otoya|Hattori/i.test(x.name)) || v[0] || null; }
+  function speak(t) { if (!canSpeak || !st.voice || !t) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'ja-JP'; u.rate = st.rate; u.pitch = 1.1; if (jaVoice) u.voice = jaVoice; speechSynthesis.speak(u); } catch (e) { /* 無視 */ } }
+  const sayYen = n => n + '円';
+
+  /* ---------- おかねの え ---------- */
+  const COIN = { 1: { d: 20, f: '#EEF0F2', s: '#ADB5BD', t: '#495057' }, 5: { d: 22, f: '#E3BE55', s: '#A6822A', t: '#5C4410', hole: 1 }, 10: { d: 23.5, f: '#C47F4A', s: '#8A5230', t: '#3E2210' },
+    50: { d: 21, f: '#DDE1E4', s: '#98A0A6', t: '#343A40', hole: 1 }, 100: { d: 22.6, f: '#D2D7DB', s: '#8C949A', t: '#343A40' }, 500: { d: 26.5, f: '#D8B84E', s: '#9C7F22', t: '#4A3A08', ring: 1 } };
+  const BILL = { 1000: '#CFE3F5', 5000: '#E7DAF2', 10000: '#EEDFC8' };
+  function money(v, sz) {
+    sz = sz || 1;
+    if (BILL[v]) return '<svg class="mn" width="' + 150 * sz + '" height="' + 76 * sz + '" viewBox="0 0 150 76"><rect x="2" y="2" width="146" height="72" rx="6" fill="' + BILL[v] + '" stroke="#6C757D" stroke-width="2.5"/><rect x="9" y="9" width="132" height="58" rx="3" fill="none" stroke="#6C757D" stroke-dasharray="3 3"/><circle cx="112" cy="38" r="17" fill="#fff" opacity=".6"/><text x="58" y="47" font-size="26" text-anchor="middle" font-weight="900" fill="#343A40" font-family="sans-serif">' + v + '</text><text x="112" y="45" font-size="16" text-anchor="middle" font-weight="800" fill="#343A40">えん</text></svg>';
+    const c = COIN[v], r = 48 * c.d / 26.5, px = Math.round(100 * sz * c.d / 26.5), fs = String(v).length >= 3 ? 17 : 21;
+    let s = '<svg class="mn" width="' + px + '" height="' + px + '" viewBox="' + (50 - r - 2) + ' ' + (50 - r - 2) + ' ' + (r * 2 + 4) + ' ' + (r * 2 + 4) + '"><circle cx="50" cy="50" r="' + r + '" fill="' + c.f + '" stroke="' + c.s + '" stroke-width="3"/><circle cx="50" cy="50" r="' + (r - 5) + '" fill="none" stroke="' + c.s + '" stroke-width="1.2" opacity=".6"/>';
+    if (c.ring) s += '<circle cx="50" cy="50" r="' + (r - 11) + '" fill="#E9D48A" stroke="' + c.s + '" stroke-width="1.2"/>';
+    if (c.hole) s += '<circle cx="50" cy="50" r="' + r * .25 + '" fill="#FFF9EC" stroke="' + c.s + '" stroke-width="1.5"/><text x="50" y="' + (50 + r * .72) + '" font-size="' + (fs - 3) + '" text-anchor="middle" font-weight="900" fill="' + c.t + '" font-family="sans-serif">' + v + '</text>';
+    else s += '<text x="50" y="' + (50 + fs * .36) + '" font-size="' + fs + '" text-anchor="middle" font-weight="900" fill="' + c.t + '" font-family="sans-serif">' + v + '</text>';
+    return s + '</svg>';
+  }
+  // すくない まいすうに わける（おつり用）
+  function split(n) { const out = []; MONEY.slice().reverse().forEach(k => { while (n >= k) { out.push(k); n -= k; } }); return out; }
+
+  /* ---------- ゆびで うごかす（ドラッグ）／タップでも OK ---------- */
+  function draggable(el, opt) {
+    let sx = 0, sy = 0, ghost = null, moving = false, pid = null;
+    const target = () => opt.targets().find(t => { const r = t.getBoundingClientRect(); return lastX >= r.left - 20 && lastX <= r.right + 20 && lastY >= r.top - 20 && lastY <= r.bottom + 20; });
+    let lastX = 0, lastY = 0, over = null;
+    el.addEventListener('pointerdown', e => {
+      if (opt.disabled && opt.disabled()) return;
+      pid = e.pointerId; sx = lastX = e.clientX; sy = lastY = e.clientY; moving = false;
+      try { el.setPointerCapture(pid); } catch (x) { /* 無視 */ }
+    });
+    el.addEventListener('pointermove', e => {
+      if (e.pointerId !== pid) return;
+      lastX = e.clientX; lastY = e.clientY;
+      if (!moving && Math.hypot(lastX - sx, lastY - sy) > 10) {
+        moving = true; ghost = h('div', { class: 'ghost', html: opt.ghost() }); document.body.appendChild(ghost); el.style.opacity = '.3';
+      }
+      if (moving) {
+        ghost.style.left = lastX + 'px'; ghost.style.top = lastY + 'px';
+        const t = target(); if (t !== over) { if (over) over.classList.remove('over'); over = t; if (t) t.classList.add('over'); }
+      }
+    });
+    const end = e => {
+      if (e.pointerId !== pid) return; pid = null;
+      el.style.opacity = '';
+      if (over) over.classList.remove('over');
+      if (!moving) { if (e.type === 'pointerup') opt.onTap(); return; }
+      const t = target(); over = null;
+      if (ghost) ghost.remove(); ghost = null;
+      if (t) opt.onDrop(t); else opt.onMiss && opt.onMiss();
+    };
+    el.addEventListener('pointerup', end); el.addEventListener('pointercancel', end);
+  }
+  // えものが とんでいく
+  function flyTo(fromEl, toEl, html, done) {
+    if (st.calm || !fromEl || !toEl) { if (done) done(); return; }
+    const a = fromEl.getBoundingClientRect(), b = toEl.getBoundingClientRect();
+    const f = h('div', { class: 'flyer', html: html });
+    f.style.left = (a.left + a.width / 2 - 40) + 'px'; f.style.top = (a.top + a.height / 2 - 40) + 'px';
+    document.body.appendChild(f);
+    requestAnimationFrame(() => { f.style.transform = 'translate(' + (b.left + b.width / 2 - a.left - a.width / 2) + 'px,' + (b.top + b.height / 2 - a.top - a.height / 2) + 'px) scale(.6)'; });
+    setTimeout(() => { f.remove(); if (done) done(); }, 470);
+  }
+  function bump(el) { if (!el) return; el.classList.remove('bump'); void el.offsetWidth; el.classList.add('bump'); }
+
+  /* ============================================================
+     おいわいの 演出（クラッカー・はなび・かみふぶき）  FX
+     FX.small(el)  … 1つ できたとき（ボタンから はじける）
+     FX.big()      … ぜんぶ できたとき（クラッカー → はなび → かみふぶき）
+     ============================================================ */
+  const FX = (function () {
+    let cv = null, cx = null, parts = [], raf = 0, last = 0;
+    const COLS = ['#FF6B6B', '#FFA94D', '#FFD43B', '#69DB7C', '#4DABF7', '#9775FA', '#F783AC', '#38D9A9', '#FFFFFF'];
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const calm = () => document.body.classList.contains('calm') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    function ensure() {
+      if (cv) return;
+      cv = document.createElement('canvas');
+      cv.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:44';
+      document.body.appendChild(cv);
+      cx = cv.getContext('2d');
+      const fit = () => { const d = Math.min(window.devicePixelRatio || 1, 2); cv.width = innerWidth * d; cv.height = innerHeight * d; cx.setTransform(d, 0, 0, d, 0, 0); };
+      fit(); window.addEventListener('resize', fit);
+    }
+    function loop(t) {
+      const dt = Math.min(40, t - (last || t)); last = t;
+      cx.clearRect(0, 0, innerWidth, innerHeight);
+      for (let i = parts.length - 1; i >= 0; i--) {
+        const p = parts[i];
+        p.age += dt;
+        if (p.age >= p.life || p.y > innerHeight + 60) { if (p.onEnd) p.onEnd(p); parts.splice(i, 1); continue; }
+        p.vy += (p.g || 0) * dt; p.vx *= p.drag || 1; p.vy *= p.drag || 1;
+        p.x += p.vx * dt; p.y += p.vy * dt; p.rot += (p.vr || 0) * dt;
+        const a = p.fade ? Math.max(0, 1 - p.age / p.life) : 1;
+        cx.globalAlpha = a;
+        if (p.k === 'paper') {   // ひらひら まう かみ
+          const w = Math.cos(p.age / 120 + p.ph);
+          cx.save(); cx.translate(p.x + Math.sin(p.age / 300 + p.ph) * 6, p.y); cx.rotate(p.rot); cx.scale(1, w);
+          cx.fillStyle = p.c; cx.fillRect(-p.s / 2, -p.s / 3, p.s, p.s * 0.66); cx.restore();
+        } else if (p.k === 'ribbon') {  // くるくる リボン
+          cx.strokeStyle = p.c; cx.lineWidth = 3; cx.beginPath();
+          for (let j = 0; j < 6; j++) { const yy = p.y - j * 5, xx = p.x + Math.sin(p.age / 90 + j * .9 + p.ph) * 6; j ? cx.lineTo(xx, yy) : cx.moveTo(xx, yy); }
+          cx.stroke();
+        } else if (p.k === 'spark') {   // はなびの ひかり
+          cx.fillStyle = p.c; cx.beginPath(); cx.arc(p.x, p.y, p.s * (1 - p.age / p.life * .6), 0, 7); cx.fill();
+        } else if (p.k === 'rocket') {
+          cx.fillStyle = '#FFF3BF'; cx.beginPath(); cx.arc(p.x, p.y, 4, 0, 7); cx.fill();
+          cx.globalAlpha = .5; cx.fillStyle = '#FFD43B'; cx.beginPath(); cx.arc(p.x, p.y + 10, 3, 0, 7); cx.fill();
+        } else if (p.k === 'emoji') {
+          cx.save(); cx.translate(p.x, p.y); cx.rotate(p.rot); cx.font = p.s + 'px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';
+          cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.fillText(p.t, 0, 0); cx.restore();
+        } else if (p.k === 'ring') {
+          cx.strokeStyle = p.c; cx.lineWidth = 6 * (1 - p.age / p.life); cx.beginPath(); cx.arc(p.x, p.y, p.s + p.age * 0.35, 0, 7); cx.stroke();
+        }
+      }
+      cx.globalAlpha = 1;
+      raf = parts.length ? requestAnimationFrame(loop) : 0;
+      if (!raf) cx.clearRect(0, 0, innerWidth, innerHeight);
+    }
+    function go() { if (!raf) { last = 0; raf = requestAnimationFrame(loop); } }
+    const P = o => { parts.push(Object.assign({ age: 0, rot: 0, ph: Math.random() * 6 }, o)); };
+    function burst(x, y, n, speed, kinds) {
+      for (let i = 0; i < n; i++) {
+        const a = Math.random() * Math.PI * 2, v = rnd(speed * .4, speed);
+        const k = kinds[i % kinds.length];
+        if (k === 'paper') P({ k: 'paper', x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - .2, g: .0009, drag: .985, vr: rnd(-.01, .01), s: rnd(8, 14), c: COLS[i % COLS.length], life: 2600 });
+        else P({ k: 'spark', x: x, y: y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: .0003, drag: .975, s: rnd(2.5, 4.5), c: COLS[i % 8], life: 900, fade: true });
+      }
+      go();
+    }
+    /* ---- 音 ---- */
+    let ac = null;
+    function A() { try { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); if (ac.state === 'suspended') ac.resume(); return ac; } catch (e) { return null; } }
+    function noise(dur, vol, f0, f1, delay) {
+      const a = A(); if (!a || !FX.sound()) return;
+      const n = Math.floor(a.sampleRate * dur), b = a.createBuffer(1, n, a.sampleRate), d = b.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 2.5);
+      const s = a.createBufferSource(), fl = a.createBiquadFilter(), g = a.createGain(), t = a.currentTime + (delay || 0);
+      s.buffer = b; fl.type = 'bandpass'; fl.Q.value = 0.8; fl.frequency.setValueAtTime(f0, t); if (f1) fl.frequency.exponentialRampToValueAtTime(f1, t + dur);
+      g.gain.value = vol * FX.volume(); s.connect(fl); fl.connect(g); g.connect(a.destination); s.start(t);
+    }
+    function popSound(delay) { noise(0.25, 1.4, 2200, 500, delay); }
+    function boomSound(delay) { noise(0.9, 0.9, 700, 90, delay); }
+    function whistle(delay) {
+      const a = A(); if (!a || !FX.sound()) return;
+      const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + delay;
+      o.type = 'sine'; o.frequency.setValueAtTime(600, t); o.frequency.exponentialRampToValueAtTime(1800, t + .6);
+      g.gain.setValueAtTime(.0001, t); g.gain.linearRampToValueAtTime(.06 * FX.volume(), t + .05); g.gain.exponentialRampToValueAtTime(.0001, t + .65);
+      o.connect(g); g.connect(a.destination); o.start(t); o.stop(t + .7);
+    }
+    function clap(delay, dur) { for (let i = 0; i < dur * 14; i++) noise(0.06, rnd(.3, .7), rnd(900, 2200), 0, delay + i / 14 + rnd(0, .05)); }
+
+    // クラッカー（がめんの したの すみから）
+    function cracker(side, delay) {
+      setTimeout(() => {
+        const x = side < 0 ? 40 : innerWidth - 40, y = innerHeight - 40, dir = side < 0 ? 1 : -1;
+        P({ k: 'emoji', t: '🎉', x: x, y: y, s: 90, rot: side < 0 ? 0 : -1.4, life: 1100, fade: true });
+        for (let i = 0; i < 90; i++) {
+          const a = -Math.PI / 2 + dir * rnd(.15, .85), v = rnd(.7, 1.45);
+          P({ k: i % 5 ? 'paper' : 'ribbon', x: x, y: y - 30, vx: Math.cos(a) * v, vy: Math.sin(a) * v, g: .0011, drag: .986, vr: rnd(-.012, .012), s: rnd(9, 15), c: COLS[i % COLS.length], life: 3600 });
+        }
+        popSound(0); go();
+      }, delay);
+    }
+    function firework(x, y, delay) {
+      setTimeout(() => {
+        P({ k: 'rocket', x: x, y: innerHeight, vx: 0, vy: -(innerHeight - y) / 600, life: 600, onEnd: p => { burst(p.x, p.y, 70, .45, ['spark', 'spark', 'spark', 'paper']); P({ k: 'ring', x: p.x, y: p.y, s: 10, c: '#FFE066', life: 500, fade: true }); boomSound(0); } });
+        whistle(0); go();
+      }, delay);
+    }
+    return {
+      sound: () => true, volume: () => 1,
+      small(el, opt) {
+        if (calm() || !el) return;
+        ensure();
+        const r = el.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
+        const v = (opt && opt.variant) != null ? opt.variant : Math.floor(Math.random() * 5);
+        if (v === 0) burst(x, y, 40, .6, ['paper']);
+        else if (v === 1) { for (let i = 0; i < 10; i++) { const a = i / 10 * 6.28; P({ k: 'emoji', t: '⭐', x: x, y: y, vx: Math.cos(a) * .35, vy: Math.sin(a) * .35, g: .0004, s: 34, vr: .01, life: 900, fade: true }); } go(); }
+        else if (v === 2) { for (let i = 0; i < 8; i++) P({ k: 'emoji', t: pick2(['💖', '💗', '💕']), x: x + rnd(-40, 40), y: y, vx: rnd(-.08, .08), vy: rnd(-.45, -.25), s: rnd(28, 44), life: 1300, fade: true }); go(); }
+        else if (v === 3) { P({ k: 'ring', x: x, y: y, s: r.width * .3, c: '#FFD43B', life: 600, fade: true }); P({ k: 'ring', x: x, y: y, s: r.width * .2, c: '#69DB7C', life: 700, fade: true }); burst(x, y, 30, .5, ['spark']); }
+        else { for (let i = 0; i < 12; i++) P({ k: 'emoji', t: pick2(['✨', '🌟', '🎵', '🍀']), x: x, y: y, vx: rnd(-.5, .5), vy: rnd(-.7, -.3), g: .0012, s: rnd(26, 40), vr: rnd(-.01, .01), life: 1200, fade: true }); go(); }
+      },
+      big() {
+        if (calm()) return;
+        ensure();
+        cracker(-1, 0); cracker(1, 180);
+        const W = innerWidth, H = innerHeight;
+        firework(W * .25, H * .25, 700); firework(W * .72, H * .2, 1100); firework(W * .5, H * .32, 1500); firework(W * .35, H * .18, 1900);
+        setTimeout(() => { for (let i = 0; i < 120; i++) P({ k: i % 6 ? 'paper' : 'ribbon', x: rnd(0, W), y: rnd(-H * .6, -10), vx: rnd(-.05, .05), vy: rnd(.08, .22), g: .00004, vr: rnd(-.01, .01), s: rnd(9, 15), c: COLS[i % COLS.length], life: 6000 }); go(); }, 1200);
+        clap(0.4, 2.2);
+      }
+    };
+    function pick2(a) { return a[Math.floor(Math.random() * a.length)]; }
+  })();
+
+  // ほめことば（いろいろ）
+  const PRAISE_MORE = ['すごい！', 'やったね！', 'かっこいい！', 'いいね！', 'その ちょうし！', 'えらい！', 'じょうず！', 'ばっちり！', 'ナイス！', 'さすが！',
+    'できたね！', 'すてき！', 'てんさい！', 'グッド！', 'パーフェクト！', 'きまった！', 'いい かんじ！', 'がんばったね！', 'さいこう！', 'ピカピカ！',
+    'すばらしい！', 'まえより じょうず！', 'おみごと！', 'どんどん いこう！', 'かがやいてる！'];
+  const PRAISE_COLORS = ['#F76707', '#E64980', '#1C7ED6', '#2F9E44', '#7048E8', '#F59F00', '#0CA678'];
+
+  FX.sound = () => st.sound; FX.volume = () => Number(st.volume) || 0.8;
+
+
+  /* ============================================================
+     画面
+     ============================================================ */
+  let screen = 'home', G = null;   // G：いまの おかいもの
+  function setView(cls, kids) { const v = $('#view'); v.innerHTML = ''; v.appendChild(h('section', { class: 'screen ' + cls }, kids)); $('#homeBtn').hidden = screen === 'home'; }
+
+  /* ---- 1. どこに いく？ ---- */
+  function renderHome() {
+    screen = 'home';
+    setView('home', [
+      h('h1', { class: 'title' }, '🚶 どこに かいものに いく？'),
+      h('div', { class: 'shops' }, SHOPS.map(s => h('button', {
+        type: 'button', class: 'shop', style: '--c:' + s.c,
+        onclick: () => { if (!tapOk(600)) return; sfx.tap(); speak(s.name + 'に いこう'); startShop(s); }
+      }, h('span', { class: 'awn' }), h('span', { class: 'ic emo' }, s.icon), h('span', { class: 'nm' }, s.name),
+        h('small', null, st.mode === 'budget' ? yen(st.budget) + 'で かおう' : 'おつかい メモ'))))
+    ]);
+  }
+
+  function startShop(shop) {
+    const items = itemsOf(shop);
+    let memo = [];
+    if (st.mode === 'memo') {
+      memo = shuffle(items).slice(0, Math.min(st.kinds, items.length)).map(it => ({ it: it, q: 1, got: 0 }));
+      if (st.multi && memo.length) { const m = pick(memo); m.q = 2 + Math.floor(Math.random() * 2); }
+    }
+    G = { shop: shop, items: items, memo: memo, basket: [], scanned: [], tray: [], wallet: null, t: Date.now() };
+    renderMemo();
+  }
+
+  /* ---- 2. おつかい メモ ---- */
+  function memoRows(small) {
+    return G.memo.map(m => h('div', { class: 'mrow' + (m.got >= m.q ? ' ok' : '') }, pic(m.it), h('span', null, m.it.name), h('span', { class: 'q' }, (m.q > 1 ? '×' + m.q : '') + (st.showPrice && !small ? '　' + yen(m.it.price) : ''))));
+  }
+  function renderMemo() {
+    screen = 'memo';
+    const s = G.shop;
+    const say = st.mode === 'memo' ? s.name + 'で、' + G.memo.map(m => m.it.name + (m.q > 1 ? 'を ' + m.q + 'こ' : '')).join('と、') + 'を かってきてね。' : s.name + 'で、' + sayYen(st.budget) + 'までで すきな ものを かおう。';
+    setView('memo-scr', [
+      st.mode === 'memo'
+        ? h('div', { class: 'memo' }, h('h2', null, '📝 おつかい メモ'), memoRows(false))
+        : h('div', { class: 'memo' }, h('h2', null, '👛 きょうの おこづかい'), h('div', { class: 'budget' }, h('b', null, yen(st.budget)), ' まで', h('br'), 'すきな ものを かおう')),
+      h('div', { class: 'actions' },
+        h('button', { type: 'button', class: 'round-btn', 'aria-label': 'よみあげ', onclick: () => speak(say) }, '🔊'),
+        h('button', { type: 'button', class: 'big-btn or', onclick: () => { if (!tapOk(700)) return; sfx.door(); renderStore(); } }, h('span', { class: 'emo' }, s.icon), 'おみせに はいる'))
+    ]);
+    speak(say);
+  }
+
+  /* ---- 3. おみせの なか（たなから かごへ） ---- */
+  const basketTotal = () => G.basket.reduce((a, it) => a + it.price, 0);
+  const memoDone = () => G.memo.every(m => m.got >= m.q);
+  function renderStore() {
+    screen = 'store';
+    const shelves = h('div', { class: 'shelves', id: 'shelves' });
+    const rows = [], per = Math.ceil(G.items.length / (G.items.length > 8 ? 3 : 2));
+    for (let i = 0; i < G.items.length; i += per) rows.push(G.items.slice(i, i + per));
+    rows.forEach(r => shelves.appendChild(h('div', { class: 'shelf' }, r.map(itemEl))));
+    const basket = h('div', { class: 'basket', id: 'basket' });
+    const sum = h('div', { class: 'sum', id: 'sum' });
+    const toReg = h('button', { type: 'button', class: 'big-btn go', id: 'toReg', style: 'min-width:0;width:100%;font-size:26px;min-height:76px', onclick: goRegister }, '🧾 レジへ');
+    setView('scr-store', [
+      h('div', { class: 'store', style: 'flex:1;min-height:0' },
+        h('div', { class: 'side left' },
+          st.mode === 'memo' ? h('div', { class: 'memo-mini', id: 'memoMini' }) : h('div', { class: 'memo-mini' }, h('div', { class: 't' }, 'おこづかい'), h('div', { class: 'budget' }, h('b', null, yen(st.budget)))),
+          h('div', { class: 'hint' }, 'しなものを かごへ ドラッグ（タップでも OK）')),
+        shelves,
+        h('div', { class: 'side' }, h('div', { class: 'basket-box' }, sum, basket, toReg)))
+    ]);
+    drawBasket();
+    speak(st.mode === 'memo' ? 'メモの ものを かごに いれよう' : 'すきな ものを かごに いれよう');
+  }
+  function itemEl(it) {
+    const b = h('button', { type: 'button', class: 'item' }, pic(it), h('span', { class: 'tag' }, yen(it.price)), h('span', { class: 'nm' }, it.name));
+    const add = () => putInBasket(it, b);
+    draggable(b, { targets: () => [$('#basket')].filter(Boolean), ghost: () => b.querySelector('.pic').outerHTML, onDrop: () => putInBasket(it, b, true), onTap: add });
+    return b;
+  }
+  function putInBasket(it, el, dropped) {
+    if (st.mode === 'memo') {
+      const m = G.memo.find(x => x.it.id === it.id);
+      if (!m) { el.classList.remove('ng'); void el.offsetWidth; el.classList.add('ng'); sfx.ng(); speak(it.name + 'は メモに ないよ'); return; }
+      if (m.got >= m.q) { sfx.ng(); speak(it.name + 'は もう ' + m.q + 'こ いれたよ'); return; }
+      m.got++;
+    } else if (basketTotal() + it.price > st.budget) { el.classList.remove('ng'); void el.offsetWidth; el.classList.add('ng'); sfx.ng(); speak('おこづかいが たりなく なるよ。のこりは ' + sayYen(st.budget - basketTotal())); return; }
+    G.basket.push(it);
+    const done = () => { sfx.plop(); bump($('#basket')); drawBasket(); };
+    if (dropped) done(); else flyTo(el, $('#basket'), pic(it).outerHTML, done);
+    speak(it.name + '、' + sayYen(it.price));
+    if (st.mode === 'memo' && memoDone()) setTimeout(() => { showPraise('ぜんぶ そろった！'); speak('メモの もの、ぜんぶ そろったね！ レジに いこう'); FX.small($('#toReg')); }, 600);
+  }
+  function drawBasket() {
+    const b = $('#basket'); if (!b) return;
+    b.innerHTML = '';
+    if (!G.basket.length) b.appendChild(h('div', { class: 'empty' }, 'ここに いれてね'));
+    G.basket.forEach((it, i) => {
+      const x = h('button', { type: 'button', class: 'bi', 'aria-label': it.name + 'を もどす' }, pic(it));
+      x.addEventListener('click', () => {   // かごから たなへ もどす
+        G.basket.splice(i, 1);
+        const m = G.memo.find(z => z.it.id === it.id); if (m) m.got--;
+        sfx.tap(); drawBasket();
+      });
+      b.appendChild(x);
+    });
+    const sum = $('#sum'), tot = basketTotal();
+    sum.textContent = st.showSum ? 'かごの なか：' + yen(tot) : 'かごの なか：' + G.basket.length + 'こ';
+    sum.classList.toggle('over', st.mode === 'budget' && tot > st.budget);
+    const mm = $('#memoMini');
+    if (mm) { mm.innerHTML = ''; mm.append(h('div', { class: 't' }, '📝 メモ'), ...memoRows(true)); }
+    const ready = G.basket.length && (st.mode !== 'memo' || memoDone());
+    $('#toReg').classList.toggle('dim', !ready);
+  }
+  function goRegister() {
+    if (!tapOk(600)) return;
+    if (!G.basket.length) { speak('かごに しなものを いれてね'); return; }
+    if (st.mode === 'memo' && !memoDone()) { speak('まだ メモの ものが あるよ'); bump($('#memoMini')); return; }
+    sfx.tap(); renderRegister();
+  }
+
+  /* ---- 4. レジ（ピッと する） ---- */
+  const scannedTotal = () => G.scanned.reduce((a, it) => a + it.price, 0);
+  function renderRegister() {
+    screen = 'reg';
+    G.scanned = [];
+    const lane = h('div', { class: 'lane', id: 'lane' });
+    G.basket.forEach((it, i) => {
+      const el = h('button', { type: 'button', class: 'scanitem' }, pic(it), h('span', { class: 'pr' }, yen(it.price)));
+      draggable(el, { targets: () => [$('#glass')].filter(Boolean), ghost: () => el.querySelector('.pic').outerHTML, onDrop: () => scan(it, el, true), onTap: () => scan(it, el) });
+      lane.appendChild(el);
+    });
+    setView('scr-reg', [
+      h('div', { class: 'reg', style: 'flex:1;min-height:0' },
+        h('div', { class: 'clerk' }, h('span', { class: 'face emo' }, G.shop.clerk), h('div', { class: 'bubble', id: 'bubble' }, 'いらっしゃいませ！')),
+        h('div', { class: 'counter' }, h('div', { class: 'lab' }, '🛒 かご（スキャナーへ ドラッグ・タップで ピッ）'), lane),
+        h('div', { class: 'bagside' },
+          h('div', { class: 'scanner' }, h('div', { class: 'glass', id: 'glass' }), h('div', { class: 'display', id: 'disp' }, h('small', null, 'ごうけい'), '0')),
+          h('div', { class: 'lane', id: 'bagged' })),
+        h('div', { class: 'paybar', id: 'paybar' }))
+    ]);
+    speak('いらっしゃいませ。しなものを ピッと しよう');
+  }
+  function scan(it, el, dropped) {
+    if (!el.isConnected || el.dataset.done) return;
+    el.dataset.done = '1';
+    const go = () => {
+      el.remove(); G.scanned.push(it); sfx.beep();
+      $('#disp').innerHTML = '<small>ごうけい</small>' + scannedTotal();
+      $('#bagged').appendChild(pic(it));
+      speak(it.name + '、' + sayYen(it.price));
+      if (G.scanned.length === G.basket.length) {
+        const tot = scannedTotal();
+        setTimeout(() => {
+          $('#bubble').textContent = 'ぜんぶで ' + yen(tot) + ' です';
+          speak('ぜんぶで ' + sayYen(tot) + ' です');
+          const pb = $('#paybar'); pb.innerHTML = '';
+          pb.appendChild(h('button', { type: 'button', class: 'big-btn or', onclick: () => { if (tapOk(600)) { sfx.tap(); renderPay(); } } }, '👛 おかねを はらう'));
+        }, 700);
+      }
+    };
+    if (dropped) go(); else flyTo(el, $('#glass'), pic(it).outerHTML, go);
+  }
+
+  /* ---- 5. おかねを はらう ---- */
+  function startWallet(tot) {
+    // ちょうど：えらんだ おかねを たくさん ／ おつり：はらえる だけの おおきい おかねだけ
+    if (st.pay === 'change') {
+      const big = [100, 500, 1000, 5000].find(v => v >= tot && v > tot) || 5000;
+      const n = Math.ceil(tot / big) || 1;
+      const w = {}; w[big] = Math.max(n, 1);
+      return w;
+    }
+    const w = {}; st.wallet.forEach(v => { w[v] = v >= 1000 ? 2 : 9; }); return w;
+  }
+  const trayTotal = () => G.tray.reduce((a, v) => a + v, 0);
+  function renderPay() {
+    screen = 'pay';
+    const tot = scannedTotal();
+    if (!G.wallet) G.wallet = startWallet(tot);
+    G.tray = [];
+    setView('scr-pay', [
+      h('div', { class: 'pay', style: 'flex:1;min-height:0' },
+        h('div', { class: 'clerk' }, h('span', { class: 'face emo' }, G.shop.clerk), h('div', { class: 'bubble', id: 'bubble' }, yen(tot) + ' です')),
+        h('div', { class: 'tray', id: 'tray' }),
+        h('div', { class: 'wallet', id: 'wallet' }),
+        h('div', { class: 'paybar' },
+          h('div', { class: 'sum', id: 'paysum' }),
+          h('button', { type: 'button', class: 'big-btn go', id: 'payBtn', onclick: doPay }, '💴 これで はらう')))
+    ]);
+    drawPay();
+    speak(sayYen(tot) + ' です。おさいふから おかねを だそう' + (st.pay === 'change' ? '。おつりを もらおう' : ''));
+  }
+  function drawPay() {
+    const w = $('#wallet'), t = $('#tray');
+    w.innerHTML = ''; t.innerHTML = '';
+    t.appendChild(h('div', { class: 'lab' }, 'ここに おかねを おく'));
+    Object.keys(G.wallet).map(Number).sort((a, b) => a - b).forEach(v => {
+      const n = G.wallet[v];
+      const b = h('button', { type: 'button', class: 'wm' + (n ? '' : ' zero'), html: money(v, BILL[v] ? .75 : .95) + '<span class="n">×' + n + '</span>' });
+      draggable(b, { targets: () => [$('#tray')].filter(Boolean), ghost: () => money(v, BILL[v] ? .9 : 1.15), onDrop: () => putMoney(v, b, true), onTap: () => putMoney(v, b), disabled: () => !G.wallet[v] });
+      w.appendChild(b);
+    });
+    G.tray.slice().sort((a, b) => b - a).forEach(v => {
+      const x = h('button', { type: 'button', class: 'tm', html: money(v, BILL[v] ? .6 : .8) });
+      x.addEventListener('click', () => { G.tray.splice(G.tray.indexOf(v), 1); G.wallet[v]++; sfx.tap(); drawPay(); });
+      t.appendChild(x);
+    });
+    $('#paysum').textContent = st.showSum ? 'だした おかね：' + yen(trayTotal()) : 'だした おかね：' + G.tray.length + 'まい';
+  }
+  function putMoney(v, el, dropped) {
+    if (!G.wallet[v]) return;
+    G.wallet[v]--; G.tray.push(v);
+    const go = () => { sfx.coin(G.tray.length); drawPay(); };
+    if (dropped) go(); else flyTo(el, $('#tray'), money(v, BILL[v] ? .7 : .9), go);
+    speak(sayYen(v));
+  }
+  function doPay() {
+    if (!tapOk(800)) return;
+    const tot = scannedTotal(), paid = trayTotal();
+    if (paid < tot) { sfx.ng(); $('#bubble').textContent = 'あと ' + yen(tot - paid) + ' たりないよ'; speak('あと ' + sayYen(tot - paid) + ' たりないよ'); bump($('#tray')); return; }
+    if (paid > tot && st.pay === 'exact') {
+      // ちょうどの れんしゅう：おおすぎる ときは へらすように つたえる
+      sfx.ng(); $('#bubble').textContent = yen(paid - tot) + ' おおいよ。ちょうどに しよう'; speak(sayYen(paid - tot) + ' おおいよ。ちょうどに しよう'); bump($('#tray')); return;
+    }
+    G.paid = paid; G.change = paid - tot;
+    sfx.till();
+    if (G.change > 0) return giveChange();
+    $('#bubble').textContent = 'ちょうど いただきます！'; speak('ちょうど いただきます。ありがとうございました');
+    showPraise('ちょうど！'); setTimeout(renderReceipt, 1500);
+  }
+  // おつりを もらう：トレーに おつりが でてくるので おさいふへ もどす
+  function giveChange() {
+    const ch = split(G.change);
+    $('#bubble').textContent = yen(G.paid) + ' おあずかり します。おつりは ' + yen(G.change) + ' です';
+    speak(sayYen(G.paid) + ' おあずかり します。おつりは ' + sayYen(G.change) + ' です。おつりを おさいふに しまおう');
+    G.tray = [];
+    const t = $('#tray'); t.innerHTML = ''; t.appendChild(h('div', { class: 'lab' }, '🪙 おつり（おさいふへ うごかそう）'));
+    $('#payBtn').style.display = 'none';
+    $('#paysum').textContent = 'おつり：' + yen(G.change);
+    let left = ch.length;
+    ch.forEach((v, i) => {
+      const x = h('button', { type: 'button', class: 'wm', html: money(v, BILL[v] ? .7 : .95), style: 'animation:pop .4s ' + (i * .12) + 's both' });
+      const take = () => { if (x.dataset.done) return; x.dataset.done = 1; G.wallet[v] = (G.wallet[v] || 0) + 1; sfx.coin(i); left--; x.remove(); if (!left) { showPraise('ありがとう！'); speak('ありがとうございました'); setTimeout(renderReceipt, 1300); } };
+      draggable(x, { targets: () => [$('#wallet')].filter(Boolean), ghost: () => money(v, 1), onDrop: take, onTap: () => flyTo(x, $('#wallet'), money(v, .9), take) });
+      t.appendChild(x);
+    });
+  }
+
+  /* ---- 6. レシートと おいわい ---- */
+  function renderReceipt() {
+    screen = 'done';
+    const tot = scannedTotal(), d = new Date();
+    const groups = {}; G.scanned.forEach(it => { const k = it.id; groups[k] = groups[k] || { it: it, n: 0 }; groups[k].n++; });
+    log.push({ d: d.toISOString().slice(0, 10), shop: G.shop.name, n: G.scanned.length, tot: tot, paid: G.paid, ch: G.change, sec: Math.round((Date.now() - G.t) / 1000) });
+    persist();
+    setView('done-scr', [
+      h('h1', { class: 'goal-title rainbow-text' }, 'おかいもの できた！'),
+      h('div', { class: 'done-row' },
+        h('div', { class: 'bagbig emo' }, '🛍️'),
+        h('div', { class: 'receipt' },
+          h('h3', null, G.shop.icon + ' ' + G.shop.name), h('div', { style: 'text-align:center;font-size:14px' }, d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate()), h('hr'),
+          Object.keys(groups).map(k => h('div', { class: 'r' }, h('span', null, groups[k].it.name + (groups[k].n > 1 ? ' ×' + groups[k].n : '')), h('span', null, yen(groups[k].it.price * groups[k].n)))),
+          h('hr'), h('div', { class: 'r tot' }, h('span', null, 'ごうけい'), h('span', null, yen(tot))),
+          h('div', { class: 'r' }, h('span', null, 'おあずかり'), h('span', null, yen(G.paid))),
+          h('div', { class: 'r' }, h('span', null, 'おつり'), h('span', null, yen(G.change))),
+          h('hr'), h('div', { style: 'text-align:center' }, 'ありがとうございました'))),
+      h('div', { class: 'actions' },
+        h('button', { type: 'button', class: 'big-btn blue', onclick: () => { if (tapOk(600)) startShop(G.shop); } }, '🔁 もういちど'),
+        h('button', { type: 'button', class: 'big-btn go', onclick: () => { if (tapOk(600)) renderHome(); } }, '🏠 ほかの おみせ'))
+    ]);
+    for (let i = 0; i < 6; i++) setTimeout(sfx.paper, i * 130);
+    setTimeout(() => { sfx.fanfare(); FX.big(); speak('おかいもの できたね！ すごい！'); }, 900);
+  }
+
+  /* ============================================================
+     先生用
+     ============================================================ */
+  let draft = { shop: 'super', n: '', e: '', p: 100, img: '' };
+  function openSettings() { if (canSpeak) speechSynthesis.cancel(); renderSettings(); $('#settings').classList.add('open'); $('#settings').scrollTop = 0; }
+  function closeSettings() { $('#settings').classList.remove('open'); document.body.classList.toggle('calm', !!st.calm); if (screen === 'home') renderHome(); }
+  function refresh() { const m = $('#settings'), y = m.scrollTop; renderSettings(); m.scrollTop = y; }
+  function set(k, v) { st[k] = v; persist(); refresh(); }
+  function renderSettings() {
+    const P = $('#settingsPanel'); P.innerHTML = '';
+    const seg = (label, key, opts, note) => [h('div', { class: 'seglabel' }, label), h('div', { class: 'seg' }, opts.map(o => h('button', { type: 'button', class: String(st[key]) === String(o[0]) ? 'on' : '', onclick: () => set(key, o[0]) }, o[1]))), note ? h('p', { class: 'note' }, note) : null];
+    const chk = (key, label) => h('label', { class: 'row' }, h('span', null, label), h('input', { type: 'checkbox', checked: !!st[key], onchange: e => { st[key] = e.target.checked; persist(); } }));
+    const prev = h('div', { class: 'photo-prev' }, draft.img ? '' : 'しゃしん'); if (draft.img) prev.style.backgroundImage = 'url("' + draft.img + '")';
+    P.append(
+      h('div', { class: 'panel-head' }, h('h2', null, '⚙️ 先生用せってい'), h('button', { type: 'button', class: 'btn ok', onclick: closeSettings }, 'とじる')),
+      h('p', { class: 'note' }, '右上の ⚙️ を 1.5秒 ながおしで ひらきます（Shift＋S でも）。せっていは この端末に 保存されます。'),
+      h('h3', null, 'かいものの しかた'),
+      seg('もくひょう', 'mode', [['memo', '📝 おつかい メモ'], ['budget', '👛 おこづかいで じゆうに']]),
+      st.mode === 'memo' ? [seg('メモの しゅるい', 'kinds', [[1, '1しゅるい'], [2, '2しゅるい'], [3, '3しゅるい'], [4, '4しゅるい']]), h('label', { class: 'row' }, h('span', null, '×2・×3 の ものも まぜる'), h('input', { type: 'checkbox', checked: !!st.multi, onchange: e => set('multi', e.target.checked) }))]
+        : seg('おこづかい', 'budget', [[100, '100えん'], [300, '300えん'], [500, '500えん'], [1000, '1000えん']]),
+      seg('ねだん', 'price', [['hundred', '100えん たんい（かんたん）'], ['ten', '10えん たんい'], ['real', '98えん など（ほんもの ふう）']]),
+      h('h3', null, 'はらいかた'),
+      seg('はらいかた', 'pay', [['exact', '🎯 ちょうど はらう'], ['change', '🪙 おおきい おかねで はらって おつりを もらう']], 'おつりモードでは、おさいふに「ごうけいより おおきい おかね」だけが はいります（100えん・500えん・1000えん・5000えん から じどうで）。'),
+      st.pay === 'exact' ? [h('div', { class: 'seglabel' }, 'おさいふに いれる おかね（ちょうど モード）'), h('div', { class: 'chips' }, MONEY.map(v => h('button', { type: 'button', class: 'chipt' + (st.wallet.indexOf(v) >= 0 ? ' on' : ''), onclick: () => { const w = st.wallet.slice(), i = w.indexOf(v); if (i >= 0) { if (w.length > 1) w.splice(i, 1); } else w.push(v); set('wallet', w); } }, yen(v))))] : null,
+      chk('showSum', '🧮 かご・だした おかねの ごうけいを ひょうじ（たすけ）'),
+      chk('showPrice', '🏷️ メモに ねだんを かく'),
+      h('h3', null, 'しなものを つくる（写真も つけられます）'),
+      h('p', { class: 'note' }, '学校の近くの お店の しなものや、実物の 写真で つくれます。'),
+      h('div', { class: 'cform' },
+        h('div', { class: 'crow' }, h('select', { onchange: e => { draft.shop = e.target.value; } }, SHOPS.map(s => h('option', { value: s.id, selected: s.id === draft.shop }, s.icon + ' ' + s.name))),
+          h('input', { type: 'text', placeholder: 'なまえ', maxlength: '12', value: draft.n, oninput: e => { draft.n = e.target.value; } }),
+          h('input', { type: 'text', placeholder: 'えもじ', maxlength: '6', style: 'width:90px', value: draft.e, oninput: e => { draft.e = e.target.value; } }),
+          h('input', { type: 'number', min: '1', max: '9999', style: 'width:110px', value: draft.p, oninput: e => { draft.p = e.target.value; } }), 'えん'),
+        h('div', { class: 'crow' }, prev, h('label', { class: 'btn' }, '📷 しゃしん', h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: e => { const f = e.target.files && e.target.files[0]; if (f) toData(f).then(d => { draft.img = d; refresh(); }); } })),
+          h('button', { type: 'button', class: 'btn ok', onclick: () => { if (!draft.n.trim()) { toast('なまえを いれてください'); return; } custom.push({ id: 'c' + uid(), shop: draft.shop, n: draft.n.trim(), e: draft.e.trim(), p: Number(draft.p) || 100, img: draft.img }); draft = { shop: draft.shop, n: '', e: '', p: 100, img: '' }; persist(); refresh(); toast('つくりました'); } }, '＋ つくる'))),
+      h('div', { class: 'clist' }, custom.map(c => h('div', { class: 'citem' }, pic({ name: c.n, emoji: c.e, image: c.img }), h('span', { style: 'flex:1' }, (SHOPS.find(s => s.id === c.shop) || {}).name + '：' + c.n + '（' + yen(c.p) + '）'),
+        h('button', { type: 'button', class: 'btn warn', onclick: () => { if (confirm('けしますか？')) { custom.splice(custom.indexOf(c), 1); persist(); refresh(); } } }, 'けす')))),
+      h('h3', null, 'おと・ひょうじ'),
+      chk('voice', '🗣️ こえで よみあげる'), chk('sound', '🔔 こうかおん（ピッ・チャリン など）'), chk('calm', '🌙 えんしゅつを ひかえめに'),
+      h('h3', null, 'きろく'),
+      h('p', { class: 'note' }, log.length ? 'これまで ' + log.length + 'かい。さいきん：' + log.slice(-5).reverse().map(l => l.d + ' ' + l.shop + ' ' + yen(l.tot)).join('／') : 'まだ ありません'),
+      h('div', { class: 'btns' }, h('button', { type: 'button', class: 'btn', onclick: exportCsv }, '⬇ CSV で かきだす')),
+      h('div', { class: 'btns', style: 'margin-top:24px' }, h('button', { type: 'button', class: 'btn ok', onclick: closeSettings }, 'とじる')),
+      h('div', { class: 'mieel-foot' }, h('div', { class: 'mieel-brand' }, h('span', { class: 'orb-mini' }), h('strong', null, 'MieeL'), h('a', { href: 'https://www.mieel-support-school.com/', target: '_blank', rel: 'noopener' }, 'www.mieel-support-school.com')), '© おかいもの ごっこ（特別支援教育向け）'));
+  }
+  function toData(file) {
+    return new Promise((res, rej) => { const u = URL.createObjectURL(file), img = new Image(); img.onload = () => { const sc = Math.min(1, 360 / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = img.width * sc; c.height = img.height * sc; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(u); res(c.toDataURL('image/jpeg', .8)); }; img.onerror = rej; img.src = u; });
+  }
+  function exportCsv() {
+    const rows = [['日にち', 'おみせ', 'こすう', 'ごうけい', 'はらった', 'おつり', 'かかった秒']].concat(log.map(l => [l.d, l.shop, l.n, l.tot, l.paid, l.ch, l.sec]));
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + rows.map(r => r.join(',')).join('\r\n')], { type: 'text/csv' })); a.download = 'okaimono.csv'; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 500);
+  }
+  function bindGear() {
+    const g = $('#gear'); let t = null; const c = () => { clearTimeout(t); g.classList.remove('pressing'); };
+    g.addEventListener('pointerdown', e => { e.preventDefault(); g.classList.add('pressing'); t = setTimeout(() => { c(); openSettings(); }, 1500); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => g.addEventListener(ev, c));
+    document.addEventListener('keydown', e => { if (e.shiftKey && (e.key === 'S' || e.key === 's')) openSettings(); if (e.key === 'Escape') closeSettings(); });
+    $('#settings').addEventListener('click', e => { if (e.target.id === 'settings') closeSettings(); });
+  }
+  function makeTouchIcon() { try { const c = document.createElement('canvas'); c.width = c.height = 180; const g = c.getContext('2d'); g.fillStyle = '#FFA94D'; g.fillRect(0, 0, 180, 180); g.font = '118px "Apple Color Emoji","Segoe UI Emoji",sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('🛒', 90, 98); $('#touchIcon').href = c.toDataURL(); } catch (e) { /* 無視 */ } }
+
+  document.body.classList.toggle('calm', !!st.calm);
+  bindGear(); makeTouchIcon();
+  if (canSpeak) { loadVoice(); speechSynthesis.onvoiceschanged = loadVoice; }
+  document.addEventListener('gesturestart', e => e.preventDefault());
+  $('#homeBtn').addEventListener('click', () => { if (tapOk(500) && (screen === 'memo' || screen === 'done' || confirm('おかいものを やめて おみせを えらびなおしますか？'))) renderHome(); });
+  renderHome();
+})();
+</script>
+</body>
+</html>
