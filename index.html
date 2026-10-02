@@ -78,6 +78,11 @@
   .mrow .pic .emoji { font-size: 46px; }
   .mrow .q { margin-left: auto; color: var(--main); }
   .mrow.ok { color: #ADB5BD; text-decoration: line-through; }
+  .mrow { flex-wrap: wrap; }
+  .mrow .cnt { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 4px; padding-left: 78px; margin: -4px 0 6px; font-size: 32px; }
+  .memo-mini .mrow .cnt { padding-left: 48px; font-size: 24px; margin: -2px 0 4px; }
+  .mrow .cnt .todo { opacity: .22; filter: grayscale(1); }
+  .mrow .cnt .got { animation: pop .35s cubic-bezier(.2, 1.6, .4, 1); }
   .budget { font-size: clamp(26px, 3.4vw, 40px); text-align: center; }
   .budget b { color: var(--main); font-size: 1.4em; }
 
@@ -111,6 +116,8 @@
   .basket .bi { border: none; background: transparent; padding: 0; }
   .basket .bi .pic { width: 62px; height: 60px; }
   .basket .bi .pic .emoji { font-size: 52px; }
+  .basket.many .bi .pic { width: 44px; height: 42px; } .basket.many .bi .pic .emoji { font-size: 36px; }
+  .basket.lots .bi .pic { width: 34px; height: 32px; } .basket.lots .bi .pic .emoji { font-size: 27px; }
   .basket .empty { position: absolute; inset: 40px 6px auto; text-align: center; color: #B3884A; font-size: 16px; }
   .sum { font-size: clamp(20px, 2.4vw, 26px); background: #fff; border-radius: 14px; padding: 6px 12px; border: 3px solid var(--line); text-align: center; }
   .sum.over { border-color: #E03131; color: #C92A2A; }
@@ -154,6 +161,70 @@
   .wm.zero { opacity: .25; pointer-events: none; }
   .paybar { grid-column: 1 / -1; display: flex; justify-content: center; align-items: center; gap: 16px; flex-wrap: wrap; }
   .mn { display: inline-block; vertical-align: middle; }
+
+  /* ---------- おつりの れんしゅう ---------- */
+  .shop.study { background: linear-gradient(#FFF3BF, #fff 60%); }
+  .shop.study .awn { background: repeating-linear-gradient(90deg, #F59F00 0 34px, #FFE066 34px 68px); border-bottom-color: #F59F00; }
+  .chmenu { align-items: center; gap: 16px; overflow-y: auto; }
+  .chmenu .lead { font-size: clamp(18px, 2.2vw, 24px); color: var(--sub); text-align: center; }
+  .chlv { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; width: min(100%, 1100px); }
+  .lvbtn { border: none; background: #fff; border-radius: 22px; box-shadow: 0 7px 0 rgba(0,0,0,.12); padding: 16px 10px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .lvbtn:active { transform: translateY(5px); box-shadow: 0 2px 0 rgba(0,0,0,.12); }
+  .lvbtn .stars { color: #F59F00; font-size: 22px; letter-spacing: 2px; }
+  .lvbtn .nm { font-size: clamp(21px, 2.3vw, 27px); }
+  .lvbtn .ex { font-size: 34px; }
+  .lvbtn small { color: var(--sub); font-size: 15px; font-weight: 500; }
+  .chopts { display: flex; gap: 12px 28px; flex-wrap: wrap; justify-content: center; }
+  .chopt { display: flex; align-items: center; gap: 8px; font-size: 17px; flex-wrap: wrap; justify-content: center; }
+  .chopt button { border: 3px solid var(--line); background: #fff; border-radius: 999px; padding: 10px 16px; font-size: 17px; }
+  .chopt button.on { border-color: var(--main); background: #FFF4E6; color: var(--main-d); }
+  .chq-scr { gap: 10px; }
+  .chtop { display: flex; align-items: center; gap: 12px; }
+  .chtop .clerk { flex: 1; }
+  .chtop .round-btn { width: 64px; height: 64px; font-size: 30px; }
+  .chdots { display: flex; gap: 7px; }
+  .chdots span { width: 18px; height: 18px; border-radius: 50%; background: #E9ECEF; }
+  .chdots span.on { background: var(--go); }
+  .chdots span.now { background: var(--main); transform: scale(1.3); }
+  .role { background: #E7F5FF; color: var(--blue-d); border-radius: 999px; padding: 4px 14px; font-size: 16px; white-space: nowrap; }
+  .chbody { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 16px; }
+  .chleft { background: #fff; border-radius: 24px; border: 5px solid var(--line); padding: 14px 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; min-height: 0; overflow-y: auto; }
+  .chitems { display: flex; gap: 22px; justify-content: center; align-items: flex-end; }
+  .chit { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .chit .pic { width: clamp(80px, 10vw, 110px); height: clamp(70px, 11vh, 100px); }
+  .chit .pic .emoji { font-size: clamp(60px, min(8vw, 10vh), 88px); }
+  .chit .tag { background: #fff; border: 3px solid #E03131; color: #C92A2A; border-radius: 10px; padding: 0 10px; font-size: clamp(20px, 2.4vw, 26px); }
+  .chit small { color: var(--sub); font-size: 15px; }
+  .chline { font-size: clamp(22px, 2.6vw, 30px); display: flex; align-items: center; gap: 10px; }
+  .chline b { color: var(--main); }
+  .tape { width: 100%; }
+  .tape .top { text-align: center; font-size: 16px; color: var(--sub); border: 3px solid #ADB5BD; border-bottom: none; height: 14px; border-radius: 8px 8px 0 0; margin: 18px 0 4px; position: relative; }
+  .tape .top span { position: absolute; left: 50%; top: -14px; transform: translateX(-50%); background: #fff; padding: 0 8px; }
+  .tape .bar { display: flex; height: 48px; border-radius: 10px; overflow: hidden; border: 3px solid #495057; }
+  .tape .p { background: #FFC9C9; }
+  .tape .c { flex: 1; position: relative; background: repeating-linear-gradient(45deg, #FFF9DB 0 10px, #FFEC99 10px 20px); }
+  .tape .c i { position: absolute; left: 0; top: 0; bottom: 0; background: #8CE99A; transition: width .3s; }
+  .tape .c i.over { background: #FFA8A8; }
+  .tape .lbl { display: flex; font-size: clamp(15px, 1.7vw, 19px); margin-top: 4px; }
+  .tape .lbl span { text-align: center; white-space: nowrap; }
+  .tape .lbl .cl { flex: 1; color: #E67700; }
+  .cu { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; font-size: clamp(16px, 1.9vw, 20px); }
+  .cu span { background: #E7F5FF; border-radius: 999px; padding: 4px 12px; }
+  .cu span b { color: var(--blue-d); }
+  .chright { display: flex; flex-direction: column; gap: 12px; min-height: 0; justify-content: center; }
+  .chask { text-align: center; font-size: clamp(26px, 3.2vw, 38px); }
+  .chcs { display: grid; gap: 14px; }
+  .chc { border: none; border-radius: 22px; background: #fff; box-shadow: 0 7px 0 rgba(0,0,0,.14); min-height: 84px; font-size: clamp(30px, 4vw, 46px); color: var(--blue-d); }
+  .chc:active { transform: translateY(5px); box-shadow: 0 2px 0 rgba(0,0,0,.14); }
+  .chc.ng { opacity: .35; animation: shake .45s; pointer-events: none; }
+  .chc.ok { background: var(--go); color: #fff; }
+  .chc.small { min-height: 64px; font-size: 28px; padding: 0 24px; position: relative; z-index: 1; }
+  .drawer { background: linear-gradient(#E9ECEF, #CED4DA); border: 6px solid #868E96; border-radius: 18px; padding: 26px 10px 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; position: relative; }
+  .drawer .lab { position: absolute; top: 4px; left: 0; right: 0; text-align: center; color: #495057; font-size: 15px; }
+  .chright .tray { min-height: 150px; flex: 1; }
+  @media (orientation: portrait) { .chbody { grid-template-columns: 1fr; grid-template-rows: auto 1fr; } }
+  @media (max-width: 1000px) { .role { display: none; } .chtop .bubble { font-size: 20px; padding: 6px 14px; } }
+  @media (max-height: 640px) { .chtop .clerk .face { font-size: 48px; } .chright .tray { min-height: 90px; } .tape .top { margin-top: 12px; } .chleft { gap: 6px; padding: 8px 12px; } }
 
   /* ---------- レシート ---------- */
   .done-scr { align-items: center; justify-content: center; gap: 14px; }
@@ -257,20 +328,28 @@
   const $$ = s => Array.from(document.querySelectorAll(s));
   const uid = () => Math.random().toString(36).slice(2, 9);
   const pick = a => a[Math.floor(Math.random() * a.length)];
+  const rint = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
   const shuffle = a => { const r = a.slice(); for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
   function load(k) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
   function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   const DEF = {
     mode: 'memo',            // memo：おつかいメモ ／ budget：よさんで じゆうに
     kinds: 2,                // メモの しゅるい
-    multi: false,            // ×2 など
+    multi: false,            // （むかしの せってい）
+    qty: 'one',              // one：1こずつ ／ some：ときどき 2こいじょう ／ all：ぜんぶ 2こいじょう
+    qmax: 3,                 // いちばん おおくて なんこ
+    askChange: false,        // おつりを もらう まえに「いくら？」を こたえる
+    chAns: 'choice',         // おつりの れんしゅう：choice えらぶ ／ coins おかねで わたす
+    chHint: true,            // テープずの ヒントを いつも だす
     budget: 500,
     price: 'ten',            // ten：10えん たんい ／ real：そのまま（1えん たんいも） ／ hundred：100えん たんい
     pay: 'exact',            // exact：ちょうど ／ change：おつり あり（おおきい おかねで）
     wallet: [10, 50, 100, 500, 1000],
     showSum: true, showPrice: true, voice: true, sound: true, volume: 0.8, rate: 0.95, calm: false
   };
-  const st = Object.assign({}, DEF, (load(LS) || {}).settings || {});
+  const saved = (load(LS) || {}).settings || {};
+  const st = Object.assign({}, DEF, saved);
+  if (saved.qty === undefined && saved.multi) st.qty = 'some';
   const custom = (load(LS) || {}).custom || [];   // せんせいが つくった しなもの {id, shop, n, e, p, img}
   const log = (load(LS) || {}).log || [];
   const S = () => st;
@@ -307,7 +386,7 @@
   function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
   let lockUntil = 0;
   function tapOk(ms) { const n = Date.now(); if (n < lockUntil) return false; lockUntil = n + (ms || 500); return true; }
-  function showPraise(t) { const p = h('div', { class: 'praise' }, t); document.body.appendChild(p); setTimeout(() => p.remove(), 1250); }
+  function showPraise(t) { const p = h('div', { class: 'praise', style: 'color:' + pick(PRAISE_COLORS) }, t); document.body.appendChild(p); setTimeout(() => p.remove(), 1250); }
 
   /* ---------- 音 ---------- */
   let ac = null;
@@ -546,7 +625,9 @@
         type: 'button', class: 'shop', style: '--c:' + s.c,
         onclick: () => { if (!tapOk(600)) return; sfx.tap(); speak(s.name + 'に いこう'); startShop(s); }
       }, h('span', { class: 'awn' }), h('span', { class: 'ic emo' }, s.icon), h('span', { class: 'nm' }, s.name),
-        h('small', null, st.mode === 'budget' ? yen(st.budget) + 'で かおう' : 'おつかい メモ'))))
+        h('small', null, st.mode === 'budget' ? yen(st.budget) + 'で かおう' : 'おつかい メモ'))),
+        h('button', { type: 'button', class: 'shop study', onclick: () => { if (!tapOk(600)) return; sfx.tap(); renderChangeMenu(); } },
+          h('span', { class: 'awn' }), h('span', { class: 'ic emo' }, '🪙'), h('span', { class: 'nm' }, 'おつりの れんしゅう'), h('small', null, 'レジの かかりに なろう')))
     ]);
   }
 
@@ -555,7 +636,12 @@
     let memo = [];
     if (st.mode === 'memo') {
       memo = shuffle(items).slice(0, Math.min(st.kinds, items.length)).map(it => ({ it: it, q: 1, got: 0 }));
-      if (st.multi && memo.length) { const m = pick(memo); m.q = 2 + Math.floor(Math.random() * 2); }
+      const qmax = Math.max(2, Number(st.qmax) || 3);
+      if (st.qty === 'all') memo.forEach(m => { m.q = rint(2, qmax); });
+      else if (st.qty === 'some' && memo.length) {
+        const k = memo.length === 1 ? (Math.random() < .6 ? 1 : 0) : Math.max(1, Math.floor(memo.length / 2));
+        shuffle(memo).slice(0, k).forEach(m => { m.q = rint(2, qmax); });
+      }
     }
     G = { shop: shop, items: items, memo: memo, basket: [], scanned: [], tray: [], wallet: null, t: Date.now() };
     renderMemo();
@@ -563,7 +649,9 @@
 
   /* ---- 2. おつかい メモ ---- */
   function memoRows(small) {
-    return G.memo.map(m => h('div', { class: 'mrow' + (m.got >= m.q ? ' ok' : '') }, pic(m.it), h('span', null, m.it.name), h('span', { class: 'q' }, (m.q > 1 ? '×' + m.q : '') + (st.showPrice && !small ? '　' + yen(m.it.price) : ''))));
+    // 2こ いじょうの ときは、かずの ぶんだけ えを ならべる（かごに いれた ぶんが いろつきに なる）
+    return G.memo.map(m => h('div', { class: 'mrow' + (m.got >= m.q ? ' ok' : '') }, pic(m.it), h('span', null, m.it.name), h('span', { class: 'q' }, (m.q > 1 ? '×' + m.q : '') + (st.showPrice && !small ? '　' + yen(m.it.price) : '')),
+      m.q > 1 ? h('div', { class: 'cnt' }, Array.from({ length: m.q }, (_, i) => h('span', { class: 'emo' + (small ? (i < m.got ? (i === m.got - 1 ? ' got' : '') : ' todo') : '') }, m.it.emoji || '●'))) : null));
   }
   function renderMemo() {
     screen = 'memo';
@@ -615,16 +703,20 @@
       if (!m) { el.classList.remove('ng'); void el.offsetWidth; el.classList.add('ng'); sfx.ng(); speak(it.name + 'は メモに ないよ'); return; }
       if (m.got >= m.q) { sfx.ng(); speak(it.name + 'は もう ' + m.q + 'こ いれたよ'); return; }
       m.got++;
+      G.lastM = m;
     } else if (basketTotal() + it.price > st.budget) { el.classList.remove('ng'); void el.offsetWidth; el.classList.add('ng'); sfx.ng(); speak('おこづかいが たりなく なるよ。のこりは ' + sayYen(st.budget - basketTotal())); return; }
     G.basket.push(it);
     const done = () => { sfx.plop(); bump($('#basket')); drawBasket(); };
     if (dropped) done(); else flyTo(el, $('#basket'), pic(it).outerHTML, done);
-    speak(it.name + '、' + sayYen(it.price));
+    const lm = st.mode === 'memo' ? G.lastM : null;
+    if (lm && lm.q > 1) speak(it.name + '、' + lm.got + 'こめ' + (lm.got === lm.q ? '。' + lm.q + 'こ そろったね' : ''));
+    else speak(it.name + '、' + sayYen(it.price));
     if (st.mode === 'memo' && memoDone()) setTimeout(() => { showPraise('ぜんぶ そろった！'); speak('メモの もの、ぜんぶ そろったね！ レジに いこう'); FX.small($('#toReg')); }, 600);
   }
   function drawBasket() {
     const b = $('#basket'); if (!b) return;
     b.innerHTML = '';
+    b.classList.toggle('many', G.basket.length > 6 && G.basket.length <= 12); b.classList.toggle('lots', G.basket.length > 12);
     if (!G.basket.length) b.appendChild(h('div', { class: 'empty' }, 'ここに いれてね'));
     G.basket.forEach((it, i) => {
       const x = h('button', { type: 'button', class: 'bi', 'aria-label': it.name + 'を もどす' }, pic(it));
@@ -702,7 +794,9 @@
       const w = {}; w[big] = Math.max(n, 1);
       return w;
     }
-    const w = {}; st.wallet.forEach(v => { w[v] = v >= 1000 ? 2 : 9; }); return w;
+    const w = {}; st.wallet.forEach(v => { w[v] = v >= 1000 ? 2 : 9; });
+    if (tot % 10) { w[1] = w[1] || 9; w[5] = w[5] || 3; }   // 98えん などの ときは 1えん・5えんも いれる（ちょうど はらえるように）
+    return w;
   }
   const trayTotal = () => G.tray.reduce((a, v) => a + v, 0);
   function renderPay() {
@@ -762,6 +856,7 @@
   }
   // おつりを もらう：トレーに おつりが でてくるので おさいふへ もどす
   function giveChange() {
+    if (st.askChange && !G.asked) { G.asked = true; return askChange(); }
     const ch = split(G.change);
     $('#bubble').textContent = yen(G.paid) + ' おあずかり します。おつりは ' + yen(G.change) + ' です';
     speak(sayYen(G.paid) + ' おあずかり します。おつりは ' + sayYen(G.change) + ' です。おつりを おさいふに しまおう');
@@ -776,6 +871,205 @@
       draggable(x, { targets: () => [$('#wallet')].filter(Boolean), ghost: () => money(v, 1), onDrop: take, onTap: () => flyTo(x, $('#wallet'), money(v, .9), take) });
       t.appendChild(x);
     });
+  }
+
+  // おつりを もらう まえに「おつりは いくら？」
+  function askChange() {
+    const tot = scannedTotal();
+    $('#bubble').textContent = yen(G.paid) + ' おあずかり します。おつりは いくらかな？';
+    speak(sayYen(G.paid) + ' おあずかり します。おつりは いくらかな？');
+    $('#payBtn').style.display = 'none';
+    $('#paysum').textContent = yen(G.paid) + ' − ' + yen(tot) + ' ＝ ？';
+    const t = $('#tray'); t.innerHTML = ''; t.appendChild(h('div', { class: 'lab' }, '🤔 おつりは いくら？'));
+    changeChoices({ ch: G.change, tot: tot, paid: G.paid }).forEach(v => {
+      const b = h('button', { type: 'button', class: 'chc small' }, yen(v));
+      b.addEventListener('click', () => {
+        if (!tapOk(500)) return;
+        if (v === G.change) { b.classList.add('ok'); sfx.till(); showPraise(pick(PRAISE_MORE)); FX.small(b); speak('せいかい！ おつりは ' + sayYen(v)); setTimeout(giveChange, 1300); }
+        else { b.classList.add('ng'); sfx.ng(); speak('ちがうよ。' + sayYen(G.paid) + ' から ' + sayYen(tot) + ' を ひくと？'); }
+      });
+      t.appendChild(b);
+    });
+  }
+
+  /* ============================================================
+     おつりの れんしゅう（きみは レジの かかり）
+     ============================================================ */
+  const CH_LEVELS = [
+    { lv: 1, stars: '★', ex: '🪙', name: '100えんで はらう', note: 'おつりは 10えんだま' },
+    { lv: 2, stars: '★★', ex: '🪙', name: '500えんで はらう', note: '10えん たんい' },
+    { lv: 3, stars: '★★★', ex: '💴', name: '1000えんで はらう', note: '10えん たんい' },
+    { lv: 4, stars: '★★★★', ex: '🏷️', name: 'ほんもの ふう', note: '98えん など（1えん・5えんも）' },
+    { lv: 5, stars: '★★★★★', ex: '🛒', name: '2こ かう', note: 'ごうけいを だして おつり' }
+  ];
+  const CUSTOMERS = ['🧒', '👧', '👦', '👵', '👴', '👩', '👨', '🧑'];
+  let CH = null;
+  function allItems() { return SHOPS.reduce((a, s) => a.concat(s.items.map(x => ({ name: x[0], emoji: x[1] }))), []).concat(custom.map(c => ({ name: c.n, emoji: c.e, image: c.img }))); }
+  function makeChangeQ(lv, prev) {
+    let items, paid, g = 0;
+    do {
+      const pool = shuffle(allItems());
+      if (lv === 1) { items = [Object.assign({}, pool[0], { price: rint(1, 9) * 10 })]; paid = 100; }
+      else if (lv === 2) { items = [Object.assign({}, pool[0], { price: rint(10, 49) * 10 })]; paid = 500; }
+      else if (lv === 3) { items = [Object.assign({}, pool[0], { price: rint(10, 99) * 10 })]; paid = 1000; }
+      else if (lv === 4) { const pr = Math.random() < .6 ? rint(1, 9) * 100 - 2 : rint(11, 99) * 10 - pick([0, 2, 5]); items = [Object.assign({}, pool[0], { price: pr })]; paid = pr < 500 && Math.random() < .5 ? 500 : 1000; }
+      else { items = [Object.assign({}, pool[0], { price: rint(5, 45) * 10 }), Object.assign({}, pool[1], { price: rint(5, 45) * 10 })]; const t0 = items[0].price + items[1].price; paid = t0 < 500 && Math.random() < .5 ? 500 : 1000; }
+    } while (prev && prev.paid - prev.ch === items.reduce((a, x) => a + x.price, 0) && g++ < 10);
+    const tot = items.reduce((a, x) => a + x.price, 0);
+    return { items: items, tot: tot, paid: paid, ch: paid - tot, who: pick(CUSTOMERS) };
+  }
+  // まちがえやすい こたえを まぜた 3たく
+  function changeChoices(q) {
+    const c = q.ch, out = [c];
+    const cands = shuffle([c + 10, c - 10, c + 100, c - 100, q.tot, c + 50, c - 50, c % 10 ? c + 2 : c + 20, c % 10 ? c - 2 : c - 20]).filter(x => x > 0 && x < q.paid && x !== c);
+    cands.forEach(x => { if (out.length < 3 && out.indexOf(x) < 0) out.push(x); });
+    return shuffle(out);
+  }
+  // かぞえたし（120 → 200 → 500）
+  function countUp(from, to) {
+    const out = []; let x = from;
+    [10, 100, 1000].forEach(u => { const n = Math.ceil(x / u) * u; if (x % u && n <= to) { out.push([x, n]); x = n; } });
+    if (x < to) out.push([x, to]);
+    return out;
+  }
+  function chOpt(label, key, opts) {
+    return h('div', { class: 'chopt' }, h('span', null, label), opts.map(o => h('button', { type: 'button', class: String(st[key]) === String(o[0]) ? 'on' : '', onclick: () => { st[key] = o[0]; persist(); sfx.tap(); renderChangeMenu(); } }, o[1])));
+  }
+  function renderChangeMenu() {
+    screen = 'chmenu';
+    setView('chmenu', [
+      h('h1', { class: 'title' }, '🪙 おつりの れんしゅう'),
+      h('div', { class: 'lead' }, 'きみは レジの かかり。おきゃくさんに おつりを わたそう（5もん）'),
+      h('div', { class: 'chlv' }, CH_LEVELS.map(l => h('button', { type: 'button', class: 'lvbtn', onclick: () => { if (!tapOk(600)) return; sfx.door(); startChange(l.lv); } },
+        h('span', { class: 'stars' }, l.stars), h('span', { class: 'ex emo' }, l.ex), h('span', { class: 'nm' }, l.name), h('small', null, l.note)))),
+      h('div', { class: 'chopts' },
+        chOpt('こたえかた', 'chAns', [['choice', '👆 えらぶ（3つから）'], ['coins', '🪙 おかねを わたす']]),
+        chOpt('ヒントの ず', 'chHint', [[true, '📏 いつも だす'], [false, '💡 ボタンで だす']]))
+    ]);
+    speak('おつりの れんしゅう。レベルを えらんでね');
+  }
+  function startChange(lv) {
+    CH = { lv: lv, i: 0, n: 5, miss: 0, t: Date.now(), q: makeChangeQ(lv) };
+    renderChangeQ();
+  }
+  function chSay() {
+    const q = CH.q;
+    return (q.items.length > 1 ? q.items.map(x => x.name).join('と ') + 'を ください。ごうけい ' + sayYen(q.tot) + '。' : q.items[0].name + 'を ください。' + sayYen(q.tot) + '。')
+      + sayYen(q.paid) + 'で はらいます。' + (st.chAns === 'coins' ? 'おつりを わたそう' : 'おつりは いくら？');
+  }
+  function renderChangeQ() {
+    screen = 'chq';
+    const q = CH.q;
+    CH.tray = []; CH.hint = !!st.chHint; CH.done = false; CH.cu = false;
+    const left = h('div', { class: 'chleft' },
+      h('div', { class: 'chitems' }, q.items.map(it => h('div', { class: 'chit' }, pic(it), h('span', { class: 'tag' }, yen(it.price)), h('small', null, it.name)))),
+      q.items.length > 1 ? h('div', { class: 'chline' }, 'ごうけい', h('b', null, yen(q.tot))) : null,
+      h('div', { class: 'chline' }, 'おあずかり', h('span', { html: money(q.paid, BILL[q.paid] ? .62 : .85) })),
+      h('div', { class: 'tape', id: 'tape' }),
+      h('div', { class: 'cu', id: 'cu' }));
+    const right = h('div', { class: 'chright', id: 'chright' });
+    setView('chq-scr', [
+      h('div', { class: 'chtop' },
+        h('div', { class: 'chdots' }, Array.from({ length: CH.n }, (_, i) => h('span', { class: i < CH.i ? 'on' : i === CH.i ? 'now' : '' }))),
+        h('span', { class: 'role' }, '🧑‍💼 きみは レジの かかり'),
+        h('div', { class: 'clerk' }, h('span', { class: 'face emo' }, q.who), h('div', { class: 'bubble', id: 'bubble' }, q.items.length > 1 ? 'これ ください。' : q.items[0].name + 'を ください。', h('br'), yen(q.paid) + 'で はらいます')),
+        h('button', { type: 'button', class: 'round-btn', 'aria-label': 'ヒント', onclick: () => { CH.hint = true; CH.cu = true; drawTape(); sfx.tap(); speak(cuSay()); } }, '💡'),
+        h('button', { type: 'button', class: 'round-btn', 'aria-label': 'よみあげ', onclick: () => speak(chSay()) }, '🔊')),
+      h('div', { class: 'chbody' }, left, right)
+    ]);
+    if (st.chAns === 'coins') drawDrawer(); else drawChoices();
+    drawTape();
+    speak(chSay());
+  }
+  function cuSay() {
+    const q = CH.q;
+    return sayYen(q.tot) + ' から ' + sayYen(q.paid) + ' まで かぞえて みよう。' + countUp(q.tot, q.paid).map(s => s[0] + ' と ' + (s[1] - s[0]) + ' で ' + s[1]).join('、');
+  }
+  function drawTape() {
+    const q = CH.q, t = $('#tape'), cu = $('#cu'); if (!t) return;
+    t.innerHTML = ''; cu.innerHTML = '';
+    if (!CH.hint) return;
+    const pw = q.tot / q.paid * 100, given = CH.tray.reduce((a, v) => a + v, 0);
+    const fill = h('i', { class: given > q.ch ? 'over' : '' }); fill.style.width = Math.min(100, given / q.ch * 100) + '%';
+    t.append(
+      h('div', { class: 'top' }, h('span', null, 'はらった ' + yen(q.paid))),
+      h('div', { class: 'bar' }, h('div', { class: 'p', style: 'width:' + pw + '%' }), h('div', { class: 'c' }, st.chAns === 'coins' ? fill : null)),
+      h('div', { class: 'lbl' }, h('span', { style: 'width:' + pw + '%' }, 'ねだん ' + yen(q.tot)), h('span', { class: 'cl' }, 'おつり ' + (CH.done ? yen(q.ch) : st.chAns === 'coins' && given ? yen(given) + '…' : '？'))));
+    if (CH.cu) countUp(q.tot, q.paid).forEach(s => cu.appendChild(h('span', null, s[0] + ' → ' + s[1] + '（', h('b', null, '+' + (s[1] - s[0])), '）')));
+  }
+  function drawChoices() {
+    const r = $('#chright'); r.innerHTML = '';
+    r.append(h('div', { class: 'chask' }, 'おつりは いくら？'),
+      h('div', { class: 'chcs' }, changeChoices(CH.q).map(v => {
+        const b = h('button', { type: 'button', class: 'chc' }, yen(v));
+        b.addEventListener('click', () => { if (!CH.done && tapOk(400)) chCheck(v, b); });
+        return b;
+      })));
+  }
+  function drawDrawer() {
+    const r = $('#chright'), q = CH.q; r.innerHTML = '';
+    const tray = h('div', { class: 'tray', id: 'hand' }, h('div', { class: 'lab' }, '🤲 おきゃくさんに わたす おつり'));
+    CH.tray.slice().sort((a, b) => b - a).forEach(v => {
+      const x = h('button', { type: 'button', class: 'tm', html: money(v, BILL[v] ? .55 : .75) });
+      x.addEventListener('click', () => { if (CH.done) return; CH.tray.splice(CH.tray.indexOf(v), 1); sfx.tap(); drawDrawer(); drawTape(); });
+      tray.appendChild(x);
+    });
+    const drawer = h('div', { class: 'drawer' }, h('div', { class: 'lab' }, '🗄️ レジの ひきだし（ドラッグ・タップ）'));
+    MONEY.filter(v => v < q.paid && v <= 1000).forEach(v => {
+      const b = h('button', { type: 'button', class: 'wm', html: money(v, BILL[v] ? .62 : .85) });
+      const put = () => { if (CH.done) return; CH.tray.push(v); sfx.coin(CH.tray.length); speak(sayYen(v)); drawDrawer(); drawTape(); };
+      draggable(b, { targets: () => [$('#hand')].filter(Boolean), ghost: () => money(v, BILL[v] ? .8 : 1.1), onDrop: put, onTap: () => flyTo(b, $('#hand'), money(v, BILL[v] ? .6 : .85), put) });
+      drawer.appendChild(b);
+    });
+    const sum = CH.tray.reduce((a, v) => a + v, 0);
+    r.append(tray, drawer,
+      h('div', { class: 'paybar' }, h('div', { class: 'sum' }, st.showSum ? 'わたす おつり：' + yen(sum) : 'わたす おつり：' + CH.tray.length + 'まい'),
+        h('button', { type: 'button', class: 'big-btn go', style: 'min-height:76px;font-size:28px', onclick: () => { if (!CH.done && tapOk(700)) chCheck(sum, null); } }, '🤲 おつりを わたす')));
+  }
+  function chCheck(v, btn) {
+    const q = CH.q;
+    if (st.chAns === 'coins' && !CH.tray.length) { speak('ひきだしから おかねを だしてね'); return; }
+    if (v === q.ch) {
+      CH.done = true;
+      if (btn) btn.classList.add('ok');
+      const fewest = st.chAns === 'coins' && CH.tray.length === split(q.ch).length;
+      sfx.till(); showPraise(fewest && q.ch >= 20 ? 'まいすうも ばっちり！' : pick(PRAISE_MORE)); FX.small(btn || $('#hand'));
+      $('#bubble').textContent = 'ありがとう！';
+      drawTape();
+      speak('おつりは ' + sayYen(q.ch) + '。' + (fewest && q.ch >= 20 ? 'すくない まいすうで わたせたね。' : 'せいかい！') + ' ありがとうございました');
+      CH.i++;
+      setTimeout(() => { if (screen !== 'chq') return; if (CH.i >= CH.n) renderChangeDone(); else { CH.q = makeChangeQ(CH.lv, q); renderChangeQ(); } }, 2600);
+      return;
+    }
+    CH.miss++; sfx.ng();
+    CH.hint = true; CH.cu = true; drawTape();
+    let msg;
+    if (st.chAns === 'coins') msg = v < q.ch ? 'あと ' + yen(q.ch - v) + ' たりないよ' : yen(v - q.ch) + ' おおいよ';
+    else { msg = 'ちがうよ。ずを みて かんがえよう'; if (btn) btn.classList.add('ng'); }
+    $('#bubble').textContent = msg;
+    speak(msg.replace(/えん/g, '円') + '。' + cuSay());
+    bump($('#hand'));
+  }
+  function renderChangeDone() {
+    screen = 'done';
+    const d = new Date();
+    log.push({ d: d.toISOString().slice(0, 10), shop: 'おつりの れんしゅう ★' + CH.lv + (st.chAns === 'coins' ? '（おかね）' : '（えらぶ）'), n: CH.n, tot: '', paid: '', ch: '', miss: CH.miss, sec: Math.round((Date.now() - CH.t) / 1000) });
+    persist();
+    const next = CH_LEVELS.find(l => l.lv === CH.lv + 1);
+    setView('done-scr', [
+      h('h1', { class: 'goal-title rainbow-text' }, CH.miss ? 'おつり マスター！' : 'パーフェクト！'),
+      h('div', { class: 'done-row' }, h('div', { class: 'bagbig emo' }, '🪙'),
+        h('div', { class: 'receipt' }, h('h3', null, '🧑‍💼 レジの かかり'), h('hr'),
+          h('div', { class: 'r' }, h('span', null, 'レベル'), h('span', null, CH_LEVELS[CH.lv - 1].stars)),
+          h('div', { class: 'r tot' }, h('span', null, 'できた'), h('span', null, CH.n + 'もん')),
+          h('div', { class: 'r' }, h('span', null, 'まちがい'), h('span', null, CH.miss + 'かい')),
+          h('hr'), h('div', { style: 'text-align:center' }, 'おつかれさまでした'))),
+      h('div', { class: 'actions' },
+        h('button', { type: 'button', class: 'big-btn blue', onclick: () => { if (tapOk(600)) startChange(CH.lv); } }, '🔁 もういちど'),
+        next ? h('button', { type: 'button', class: 'big-btn or', onclick: () => { if (tapOk(600)) startChange(next.lv); } }, '⬆ つぎの レベル') : null,
+        h('button', { type: 'button', class: 'big-btn go', onclick: () => { if (tapOk(600)) renderChangeMenu(); } }, '🪙 レベルを えらぶ'))
+    ]);
+    setTimeout(() => { sfx.fanfare(); FX.big(); speak(CH.miss ? 'ぜんぶ できたね！ おつり マスター！' : 'パーフェクト！ まちがい なし！ すごい！'); }, 400);
   }
 
   /* ---- 6. レシートと おいわい ---- */
@@ -808,6 +1102,12 @@
      先生用
      ============================================================ */
   let draft = { shop: 'super', n: '', e: '', p: 100, img: '' };
+  const PRESETS = [
+    { name: '★ はじめて', note: '1しゅるい・1こ・100えん たんい・ちょうど', set: { mode: 'memo', kinds: 1, qty: 'one', price: 'hundred', pay: 'exact', wallet: [100, 500], showSum: true, askChange: false } },
+    { name: '★★', note: '2しゅるい・ときどき 2〜3こ・100えん たんい・ちょうど', set: { mode: 'memo', kinds: 2, qty: 'some', qmax: 3, price: 'hundred', pay: 'exact', wallet: [100, 500, 1000], showSum: true, askChange: false } },
+    { name: '★★★', note: '2しゅるい・2〜3こ・10えん たんい・おつり', set: { mode: 'memo', kinds: 2, qty: 'some', qmax: 3, price: 'ten', pay: 'change', showSum: true, askChange: false } },
+    { name: '★★★★', note: '3しゅるい・ぜんぶ 2〜5こ・98えん など・おつりを こたえる・ごうけい ひょうじ なし', set: { mode: 'memo', kinds: 3, qty: 'all', qmax: 5, price: 'real', pay: 'change', showSum: false, askChange: true } }
+  ];
   function openSettings() { if (canSpeak) speechSynthesis.cancel(); renderSettings(); $('#settings').classList.add('open'); $('#settings').scrollTop = 0; }
   function closeSettings() { $('#settings').classList.remove('open'); document.body.classList.toggle('calm', !!st.calm); if (screen === 'home') renderHome(); }
   function refresh() { const m = $('#settings'), y = m.scrollTop; renderSettings(); m.scrollTop = y; }
@@ -817,16 +1117,22 @@
     const seg = (label, key, opts, note) => [h('div', { class: 'seglabel' }, label), h('div', { class: 'seg' }, opts.map(o => h('button', { type: 'button', class: String(st[key]) === String(o[0]) ? 'on' : '', onclick: () => set(key, o[0]) }, o[1]))), note ? h('p', { class: 'note' }, note) : null];
     const chk = (key, label) => h('label', { class: 'row' }, h('span', null, label), h('input', { type: 'checkbox', checked: !!st[key], onchange: e => { st[key] = e.target.checked; persist(); } }));
     const prev = h('div', { class: 'photo-prev' }, draft.img ? '' : 'しゃしん'); if (draft.img) prev.style.backgroundImage = 'url("' + draft.img + '")';
-    P.append(
+    const add = (...xs) => xs.flat(Infinity).forEach(x => { if (x !== null && x !== undefined && x !== false) P.append(x); });
+    add(
       h('div', { class: 'panel-head' }, h('h2', null, '⚙️ 先生用せってい'), h('button', { type: 'button', class: 'btn ok', onclick: closeSettings }, 'とじる')),
       h('p', { class: 'note' }, '右上の ⚙️ を 1.5秒 ながおしで ひらきます（Shift＋S でも）。せっていは この端末に 保存されます。'),
+      h('h3', null, 'むずかしさ（まとめて せってい）'),
+      h('div', { class: 'seg' }, PRESETS.map(pr => h('button', { type: 'button', onclick: () => { Object.assign(st, pr.set); persist(); refresh(); toast(pr.name + ' に しました'); } }, pr.name))),
+      h('p', { class: 'note' }, PRESETS.map(pr => pr.name + '：' + pr.note).join('　／　')),
       h('h3', null, 'かいものの しかた'),
       seg('もくひょう', 'mode', [['memo', '📝 おつかい メモ'], ['budget', '👛 おこづかいで じゆうに']]),
-      st.mode === 'memo' ? [seg('メモの しゅるい', 'kinds', [[1, '1しゅるい'], [2, '2しゅるい'], [3, '3しゅるい'], [4, '4しゅるい']]), h('label', { class: 'row' }, h('span', null, '×2・×3 の ものも まぜる'), h('input', { type: 'checkbox', checked: !!st.multi, onchange: e => set('multi', e.target.checked) }))]
+      st.mode === 'memo' ? [seg('メモの しゅるい', 'kinds', [[1, '1しゅるい'], [2, '2しゅるい'], [3, '3しゅるい'], [4, '4しゅるい']]), seg('おなじ ものを いくつ かう？', 'qty', [['one', '1こ ずつ'], ['some', 'ときどき 2こ いじょう'], ['all', 'ぜんぶ 2こ いじょう']], 'メモに「りんご ×3」のように でて、かごに いれるたびに「2こめ」と かぞえます。'),
+        st.qty !== 'one' ? seg('いちばん おおくて', 'qmax', [[2, '2こ'], [3, '3こ'], [4, '4こ'], [5, '5こ']]) : null]
         : seg('おこづかい', 'budget', [[100, '100えん'], [300, '300えん'], [500, '500えん'], [1000, '1000えん']]),
       seg('ねだん', 'price', [['hundred', '100えん たんい（かんたん）'], ['ten', '10えん たんい'], ['real', '98えん など（ほんもの ふう）']]),
       h('h3', null, 'はらいかた'),
       seg('はらいかた', 'pay', [['exact', '🎯 ちょうど はらう'], ['change', '🪙 おおきい おかねで はらって おつりを もらう']], 'おつりモードでは、おさいふに「ごうけいより おおきい おかね」だけが はいります（100えん・500えん・1000えん・5000えん から じどうで）。'),
+      st.pay === 'change' ? chk('askChange', '🤔 おつりを うけとる まえに「おつりは いくら？」を こたえる（3つから えらぶ）') : null,
       st.pay === 'exact' ? [h('div', { class: 'seglabel' }, 'おさいふに いれる おかね（ちょうど モード）'), h('div', { class: 'chips' }, MONEY.map(v => h('button', { type: 'button', class: 'chipt' + (st.wallet.indexOf(v) >= 0 ? ' on' : ''), onclick: () => { const w = st.wallet.slice(), i = w.indexOf(v); if (i >= 0) { if (w.length > 1) w.splice(i, 1); } else w.push(v); set('wallet', w); } }, yen(v))))] : null,
       chk('showSum', '🧮 かご・だした おかねの ごうけいを ひょうじ（たすけ）'),
       chk('showPrice', '🏷️ メモに ねだんを かく'),
@@ -844,7 +1150,7 @@
       h('h3', null, 'おと・ひょうじ'),
       chk('voice', '🗣️ こえで よみあげる'), chk('sound', '🔔 こうかおん（ピッ・チャリン など）'), chk('calm', '🌙 えんしゅつを ひかえめに'),
       h('h3', null, 'きろく'),
-      h('p', { class: 'note' }, log.length ? 'これまで ' + log.length + 'かい。さいきん：' + log.slice(-5).reverse().map(l => l.d + ' ' + l.shop + ' ' + yen(l.tot)).join('／') : 'まだ ありません'),
+      h('p', { class: 'note' }, log.length ? 'これまで ' + log.length + 'かい。さいきん：' + log.slice(-5).reverse().map(l => l.d + ' ' + l.shop + (l.tot !== '' ? ' ' + yen(l.tot) : ' まちがい' + l.miss)).join('／') : 'まだ ありません'),
       h('div', { class: 'btns' }, h('button', { type: 'button', class: 'btn', onclick: exportCsv }, '⬇ CSV で かきだす')),
       h('div', { class: 'btns', style: 'margin-top:24px' }, h('button', { type: 'button', class: 'btn ok', onclick: closeSettings }, 'とじる')),
       h('div', { class: 'mieel-foot' }, h('div', { class: 'mieel-brand' }, h('span', { class: 'orb-mini' }), h('strong', null, 'MieeL'), h('a', { href: 'https://www.mieel-support-school.com/', target: '_blank', rel: 'noopener' }, 'www.mieel-support-school.com')), '© おかいもの ごっこ（特別支援教育向け）'));
@@ -853,7 +1159,7 @@
     return new Promise((res, rej) => { const u = URL.createObjectURL(file), img = new Image(); img.onload = () => { const sc = Math.min(1, 360 / Math.max(img.width, img.height)), c = document.createElement('canvas'); c.width = img.width * sc; c.height = img.height * sc; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, c.width, c.height); g.drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(u); res(c.toDataURL('image/jpeg', .8)); }; img.onerror = rej; img.src = u; });
   }
   function exportCsv() {
-    const rows = [['日にち', 'おみせ', 'こすう', 'ごうけい', 'はらった', 'おつり', 'かかった秒']].concat(log.map(l => [l.d, l.shop, l.n, l.tot, l.paid, l.ch, l.sec]));
+    const rows = [['日にち', 'おみせ・れんしゅう', 'こすう・もんだい', 'ごうけい', 'はらった', 'おつり', 'まちがい', 'かかった秒']].concat(log.map(l => [l.d, l.shop, l.n, l.tot, l.paid, l.ch, l.miss === undefined ? '' : l.miss, l.sec]));
     const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + rows.map(r => r.join(',')).join('\r\n')], { type: 'text/csv' })); a.download = 'okaimono.csv'; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 500);
   }
   function bindGear() {
@@ -869,7 +1175,7 @@
   bindGear(); makeTouchIcon();
   if (canSpeak) { loadVoice(); speechSynthesis.onvoiceschanged = loadVoice; }
   document.addEventListener('gesturestart', e => e.preventDefault());
-  $('#homeBtn').addEventListener('click', () => { if (tapOk(500) && (screen === 'memo' || screen === 'done' || confirm('おかいものを やめて おみせを えらびなおしますか？'))) renderHome(); });
+  $('#homeBtn').addEventListener('click', () => { if (tapOk(500) && (screen === 'memo' || screen === 'done' || screen === 'chmenu' || confirm('おかいものを やめて おみせを えらびなおしますか？'))) renderHome(); });
   renderHome();
 })();
 </script>
