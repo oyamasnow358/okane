@@ -304,6 +304,11 @@
 <div class="modal" id="settings" role="dialog" aria-modal="true"><div class="panel" id="settingsPanel"></div></div>
 <div class="toast" id="toast"></div>
 <script>
+function jaSay(t) {
+  // 読み上げで 単語の あたまの「は」「へ」が 助詞（わ・え）と 読まれないように カタカナに する（はこ→ハこ、へや→ヘや）
+  return String(t == null ? '' : t).replace(/なかまはずれ/g, '仲間外れ').replace(/(^|[\s、。！？!?・（(「『])([はへ])(?=[\u3041-\u3096\u30A1-\u30FA\u30FC\u4E00-\u9FFF])/g, function (m, a, c) { return a + (c === 'は' ? 'ハ' : 'ヘ'); });
+}
+
 (function () {
   'use strict';
 
@@ -406,7 +411,7 @@
   const canSpeak = 'speechSynthesis' in window;
   let jaVoice = null;
   function loadVoice() { if (!canSpeak) return; const v = speechSynthesis.getVoices().filter(x => /^ja/i.test(x.lang)); jaVoice = v.find(x => /Kyoko|O-ren|Otoya|Hattori/i.test(x.name)) || v[0] || null; }
-  function speak(t) { if (!canSpeak || !st.voice || !t) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = 'ja-JP'; u.rate = st.rate; u.pitch = 1.1; if (jaVoice) u.voice = jaVoice; speechSynthesis.speak(u); } catch (e) { /* 無視 */ } }
+  function speak(t) { if (!canSpeak || !st.voice || !t) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(jaSay(t)); u.lang = 'ja-JP'; u.rate = st.rate; u.pitch = 1.1; if (jaVoice) u.voice = jaVoice; speechSynthesis.speak(u); } catch (e) { /* 無視 */ } }
   const sayYen = n => n + '円';
 
   /* ---------- おかねの え ---------- */
